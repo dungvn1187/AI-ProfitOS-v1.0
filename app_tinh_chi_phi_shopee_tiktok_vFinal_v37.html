@@ -1,0 +1,1794 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shopee & TikTok Toolkit - Máy tính phí vFinal_v37</title>
+  <style>
+    :root{
+      --bg:#f4f4f5;
+      --card:#ffffff;
+      --text:#202632;
+      --muted:#8f96a3;
+      --line:#e6e9ee;
+      --line-soft:#eef1f5;
+      --shadow:0 1px 2px rgba(27,39,54,.025),0 8px 24px rgba(27,39,54,.03);
+      --radius:12px;
+      --accent:#b45d89;
+      --accent-dark:#8f4a75;
+      --accent-soft:#f5edf1;
+      --success:#2fa563;
+      --danger:#de5e78;
+      --warn:#c79b2c;
+      --fixed-bg:#fff8eb;
+      --fixed-bd:#e9dcc1;
+      --fixed-strong:#b7872a;
+      --var-bg:#eef8ff;
+      --var-bd:#d2e5f2;
+      --var-strong:#4e95bf;
+      --green-bg:#f4fbf6;
+      --green-bd:#cfe5d5;
+      --green-strong:#5ca36f;
+      --pink:#ff4f7a;
+      --pink-dark:#ff2f62;
+      --dark:#1d232c;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;background:var(--bg);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:var(--text)}
+    body{padding:28px 0 44px;-webkit-font-smoothing:antialiased;text-rendering:geometricPrecision}
+    .app{width:1220px;max-width:calc(100vw - 28px);margin:0 auto}
+    .kicker{font-size:13px;letter-spacing:.18em;color:#9ea5b0;font-weight:700;text-transform:uppercase;margin-bottom:4px}
+    h1{margin:0;font-size:28px;line-height:1.15;font-weight:800;color:#232831;letter-spacing:-.02em}
+    h1 .brand{color:var(--accent)}
+    .subtitle{margin:6px 0 14px;color:#7f8691;font-size:14px;line-height:1.5}
+    .mode-tabs{display:flex;gap:10px;margin-bottom:18px;align-items:center}
+    .platform-tabs .pill{min-width:132px}
+    .bulk-toolbar{grid-template-columns:1fr 1fr}
+    .pill{border:1px solid var(--line);background:#fff;color:#808791;border-radius:999px;padding:8px 18px;font-size:14px;font-weight:700;cursor:pointer;min-width:116px;transition:.18s;box-shadow:0 1px 0 rgba(255,255,255,.9) inset}
+    .pill.active{color:#fff;border-color:transparent;background:linear-gradient(90deg,var(--accent),#a25287 58%,#884893)}
+    .tiktok .pill.active{background:linear-gradient(90deg,#142735,#111b26)}
+    .tiktok .brand{color:#172532}
+    .tiktok .btn.primary{background:var(--pink);border-color:var(--pink)}
+    .tiktok .fixed .fee-total{background:#f9ecd0;color:#9b6d12}
+    .tiktok .variable .fee-total{background:#d9eefc;color:#3278a3}
+    .top-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:2px}
+    .bulk-head{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;padding:6px 0 14px;border-bottom:1px solid var(--line)}
+    .shop-title{font-size:20px;font-weight:800;margin-bottom:2px;letter-spacing:-.01em}
+    .status-line{font-size:13px;color:#8a919b;display:flex;align-items:center;gap:8px}
+    .status-badge{display:inline-flex;align-items:center;gap:5px;padding:2px 6px;border-radius:999px;background:#edf9f1;color:#3ca365;font-weight:700}
+    .status-badge::before{content:"";width:6px;height:6px;border-radius:50%;background:#48c46a}
+    .actions{display:flex;flex-wrap:wrap;gap:7px;justify-content:flex-end}
+    .btn{border:1px solid var(--line);background:#fff;border-radius:8px;padding:8px 12px;font-size:13px;font-weight:700;color:#5f6772;cursor:pointer;line-height:1;box-shadow:0 1px 0 rgba(255,255,255,.9) inset;min-height:32px}
+    .btn:hover{box-shadow:var(--shadow)}
+    .btn.primary{background:#b27c1b;color:#fff;border-color:#b27c1b}
+    .btn.save{background:#42a262;color:#fff;border-color:#42a262}
+    .btn.tiktok-save{background:var(--pink);color:#fff;border-color:var(--pink)}
+    .toolbar-line{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin:12px 0 8px}
+    .section-hd{display:flex;align-items:center;gap:9px;margin:14px 0 10px;color:#5f6671;font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:.02em}
+    .section-hd::after{content:"";flex:1;height:1px;background:var(--line-soft)}
+    .num{width:18px;height:18px;flex:0 0 18px;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:12px;font-weight:800;background:linear-gradient(90deg,var(--accent),#9d4f82)}
+    .tiktok .num{background:linear-gradient(90deg,#ff4f7a,#ad4d8f)}
+    .section-note{font-weight:500;text-transform:none;color:#9aa1ac}
+    .grid-info{display:grid;grid-template-columns:1fr 1fr 1.35fr;gap:12px}
+    .field{background:#fff;border:1px solid var(--line);border-radius:10px;padding:7px 10px;box-shadow:0 1px 0 rgba(255,255,255,.9) inset}
+    .field label{display:block;font-size:12px;font-weight:700;text-transform:uppercase;color:#98a0ab;margin-bottom:6px;letter-spacing:.04em}
+    .field input,.field select{width:100%;border:0;outline:none;padding:0;background:transparent;font-size:14px;font-weight:700;color:#2a3038}
+    .field .hint{margin-top:4px;color:#a4abb5;font-size:12px}
+    .field.accent{background:#fff7ea}
+    .tiktok .field.accent{background:#ffeef3}
+    .category-inline{display:flex;justify-content:space-between;align-items:center;gap:8px}
+    .tag-rate{padding:2px 6px;border-radius:999px;font-size:13px;font-weight:800;background:#ffe7bf;color:#a2701b;white-space:nowrap}
+
+    .shop-type-toggle{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:1px}
+    .shop-type-option{border:1px solid #dfe5ed;background:#fff;border-radius:7px;min-height:30px;padding:5px 7px;font-size:13px;font-weight:800;color:#69727f;cursor:pointer;transition:.14s;line-height:1;position:relative;z-index:3}
+    .shop-type-option:hover{border-color:var(--accent);color:var(--accent)}
+    .shop-type-option.active{background:linear-gradient(90deg,var(--accent),var(--accent-dark));border-color:transparent;color:#fff;box-shadow:0 5px 12px rgba(180,93,137,.18)}
+    .tiktok .shop-type-option.active{background:linear-gradient(90deg,#ff4f7a,#ff2f62);box-shadow:0 5px 12px rgba(255,79,122,.18)}
+    .field select{cursor:pointer;position:relative;z-index:3;pointer-events:auto}
+    .tiktok .tag-rate{background:#ffd7e2;color:#b14869}
+
+    .industry-tools{display:grid;grid-template-columns:1.25fr 1fr;gap:12px;margin:10px 0 12px}
+    .industry-tool-card{background:#fff;border:1px dashed #d6dee8;border-radius:12px;padding:10px 12px;box-shadow:0 1px 0 rgba(255,255,255,.9) inset}
+    .industry-tool-card label{display:block;font-size:12px;font-weight:800;color:#98a0ab;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}
+    .industry-tool-card input{width:100%;border:1px solid var(--line);border-radius:8px;background:#fbfdff;min-height:34px;padding:7px 9px;font-size:14px;font-weight:700;color:#2a3038;outline:none}
+    .industry-status{font-size:12px;color:#6ea073;font-weight:700;line-height:1.4;margin-top:6px}
+    .industry-hint{font-size:12px;color:#9aa1ac;line-height:1.4;margin-top:5px}
+
+    .bulk-meta-grid{display:grid;grid-template-columns:1.05fr 1.05fr 1.15fr 1.25fr;gap:12px;margin:12px 0 12px;align-items:stretch}
+    .bulk-meta-grid .field,.bulk-meta-card{min-height:72px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:9px 11px;box-shadow:0 1px 0 rgba(255,255,255,.9) inset}
+    .bulk-meta-card label{display:block;font-size:12px;font-weight:800;color:#98a0ab;text-transform:uppercase;letter-spacing:.05em;margin-bottom:7px}
+    .bulk-upload-btn{display:flex!important;align-items:center;justify-content:center;width:100%;min-height:28px;margin:0;border-radius:8px}
+    .bulk-meta-card .industry-hint{margin-top:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .bulk-status-row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:5px}
+    .bulk-status-row .industry-status{margin:0;flex:1}
+    .bulk-status-actions{display:flex;gap:6px;flex:0 0 auto}
+    .bulk-status-actions .btn{padding:7px 8px;font-size:12px;min-height:26px}
+    .profit-goal-card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px;margin:12px 0;box-shadow:var(--shadow)}
+    .profit-goal-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px}
+    .profit-goal-title{font-size:16px;font-weight:900;color:#222a35;text-transform:uppercase;letter-spacing:.02em}
+    .profit-goal-sub{font-size:12px;color:#9aa1ac;margin-top:3px;line-height:1.4}
+    .profit-goal-grid{display:grid;grid-template-columns:1.1fr 1.1fr 1fr;gap:10px}
+    .profit-goal-grid .field{box-shadow:none;background:#fbfcfe;min-height:58px;padding:8px 10px}
+    .suggest-price{font-weight:900;color:#1f7a42;white-space:nowrap}
+    .suggest-price.bad{color:#b94b54}
+    .category-input{min-width:0;flex:1;border:0!important;background:transparent!important;padding:0!important;min-height:auto!important;font-size:14px!important;font-weight:700!important;color:#2a3038!important;outline:none!important}
+
+    .product-info-card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px;box-shadow:var(--shadow);margin-bottom:8px}
+    .product-info-grid{display:grid;grid-template-columns:1fr 1fr 1.35fr .95fr 1.8fr 1.65fr;gap:10px;align-items:stretch}
+    .product-info-card .field{box-shadow:none;background:#fbfcfe;min-height:58px;padding:8px 10px}
+    .product-info-card .field.accent{background:#fff8eb;border-color:#eadcc0}
+    .tiktok .product-info-card .field.accent{background:#fff1f5;border-color:#ffd4df}
+    .compact-industry-actions{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:10px;padding-top:10px;border-top:1px solid var(--line-soft)}
+    .compact-industry-status{font-size:12px;color:#8f97a3;line-height:1.45}
+    .compact-industry-status b{color:#56606d}
+    .compact-industry-buttons{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+    .compact-industry-buttons .btn{min-height:27px;padding:7px 10px;font-size:12px}
+
+    .fee-layout{display:grid;grid-template-columns:1fr 220px 1fr;gap:14px;align-items:start}
+    .fee-card{border:1px solid var(--line);border-radius:13px;background:#fff;overflow:hidden;box-shadow:var(--shadow)}
+    .fee-card.fixed{background:linear-gradient(180deg,#fffdf8 0%,var(--fixed-bg) 100%);border-color:var(--fixed-bd)}
+    .fee-card.variable{background:linear-gradient(180deg,#fcfeff 0%,var(--var-bg) 100%);border-color:var(--var-bd)}
+    .fee-card.profit{background:linear-gradient(180deg,#fbfefb 0%,var(--green-bg) 100%);border-color:var(--green-bd)}
+    .fee-header{display:flex;justify-content:space-between;align-items:flex-start;padding:10px 11px 7px}
+    .fee-title{font-size:16px;font-weight:800;letter-spacing:-.01em}
+    .fee-sub{font-size:12px;color:#9da5b0;margin-top:1px}
+    .fee-head-cols{font-size:11px;color:#a1a9b2;text-transform:uppercase;font-weight:700;letter-spacing:.06em}
+    .fee-rows{padding:0 7px 8px}
+    .fee-row{display:grid;grid-template-columns:1fr 70px 78px 32px;gap:10px;align-items:center;padding:8px 4px;border-top:1px solid var(--line-soft)}
+    .fee-row:first-child{border-top:0}
+    .fee-name{font-size:14px;font-weight:700;color:#2e3440;outline:none}
+    .fee-desc{font-size:12px;color:#a0a8b2;line-height:1.2;margin-top:2px}
+    .fee-conditions{display:flex;flex-wrap:wrap;gap:4px;margin-top:5px}
+    .fee-chip{display:inline-flex;align-items:center;border:1px solid #e1e7ef;background:#fff;border-radius:999px;padding:2px 5px;font-size:11px;font-weight:800;color:#7c8693}
+    .fee-input{height:30px;border:1px solid #dde3eb;border-radius:6px;background:#fff;padding:0 8px;text-align:right;font-size:14px;font-weight:700;color:#35404f;width:100%}
+    .amt{font-size:14px;font-weight:800;text-align:right;color:#283342}
+    .row-off .fee-name,.row-off .fee-desc,.row-off .amt{opacity:.45}
+    .add-fee{margin:4px 4px 0;border:1px dashed #d8dee8;border-radius:7px;background:rgba(255,255,255,.55);text-align:center;padding:7px;font-size:13px;font-weight:700;color:#7f8792;cursor:pointer}
+    .modal-backdrop{position:fixed;inset:0;background:rgba(21,28,38,.38);display:none;align-items:center;justify-content:center;z-index:1000;padding:18px}
+    .modal-backdrop.show{display:flex}
+    .fee-modal{width:560px;max-width:100%;background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 24px 80px rgba(20,28,40,.22);overflow:hidden}
+    .fee-modal-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:16px 18px;border-bottom:1px solid var(--line-soft);background:linear-gradient(180deg,#fff,#fbfcfe)}
+    .fee-modal-title{font-size:17px;font-weight:850;color:#222a35}
+    .fee-modal-sub{font-size:13px;color:#8f98a5;margin-top:3px;line-height:1.45}
+    .modal-close{border:0;background:#f4f6f8;width:28px;height:28px;border-radius:999px;cursor:pointer;font-weight:900;color:#727b87}
+    .fee-modal-body{padding:16px 18px 14px;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .modal-field{border:1px solid var(--line);border-radius:10px;padding:9px 10px;background:#fbfcfe}
+    .modal-field.full{grid-column:1 / -1}
+    .modal-field label{display:block;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#949da9;margin-bottom:7px}
+    .modal-field input,.modal-field select,.modal-field textarea{width:100%;border:0;background:transparent;outline:none;font-size:15px;font-weight:700;color:#2b333e;resize:vertical}
+    .modal-field textarea{min-height:54px;line-height:1.45}
+    .toggle-line{display:flex;align-items:center;justify-content:space-between;gap:12px;border:1px solid var(--line);border-radius:10px;padding:10px;background:#fff}
+    .toggle-line span{font-size:14px;font-weight:800;color:#414b57}
+    .toggle-line small{display:block;font-size:12px;color:#9ca4af;margin-top:2px;font-weight:600}
+    .fee-modal-actions{display:flex;justify-content:flex-end;gap:8px;padding:12px 18px 16px;border-top:1px solid var(--line-soft);background:#fbfcfe}
+    .fee-condition-note{grid-column:1 / -1;font-size:12px;color:#8c95a1;line-height:1.5;background:#f8fafc;border:1px dashed #dce3ec;border-radius:10px;padding:8px 10px}
+    .fee-total{padding:10px 12px;display:flex;justify-content:space-between;align-items:center;font-size:14px;font-weight:800;border-top:1px solid var(--line-soft);text-transform:uppercase;letter-spacing:.03em}
+    .fixed .fee-total{background:#f9ecd0;color:#9b6d12}
+    .variable .fee-total{background:#d9eefc;color:#3278a3}
+    .profit-box{padding:11px 11px 10px}
+    .flow{display:grid;gap:6px}
+    .flow-item{display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;font-size:13px;color:#65707f;padding:2px 0}
+    .flow-item b{color:#28313c;font-size:13px}
+    .flow-item .pct{color:#98a1ac;font-size:12px}
+    .profit-net{margin-top:9px;background:#e6f7eb;border:1px solid #cfe8d6;border-radius:9px;padding:8px 9px;display:flex;justify-content:space-between;align-items:center;color:#2f7f51;font-weight:800}
+    .profit-net strong{font-size:16px;letter-spacing:-.01em}
+
+    .switch{position:relative;width:22px;height:12px;display:inline-block;justify-self:end}
+    .switch input{display:none}
+    .track{position:absolute;inset:0;border-radius:999px;background:#222b34;cursor:pointer;box-shadow:inset 0 0 0 1px rgba(0,0,0,.06)}
+    .thumb{position:absolute;left:2px;top:2px;width:8px;height:8px;border-radius:50%;background:#fff;transition:.16s;box-shadow:0 1px 2px rgba(0,0,0,.18)}
+    .switch input:checked + .track .thumb{transform:translateX(10px)}
+
+    .result-card{background:#fbfffc;border:1px solid #cfe5d5;border-radius:16px;padding:10px 12px 8px;box-shadow:var(--shadow)}
+    .result-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+    .result-kicker{font-size:12px;color:#6eaa7b;font-weight:800;text-transform:uppercase;margin-bottom:4px;letter-spacing:.08em}
+    .profit-value{font-size:20px;line-height:1;font-weight:800;color:#44a062;letter-spacing:-.02em}
+    .profit-pill{display:inline-block;margin-left:6px;padding:2px 7px;border-radius:999px;background:#eefaf1;border:1px solid #d4ebd9;font-size:12px;color:#6b7b71;font-weight:800;vertical-align:middle}
+    .range{margin:10px 0 0}
+    .bar{position:relative;height:4px;border-radius:999px;background:linear-gradient(90deg,#f2a7a2 0 26%,#f2d873 26% 52%,#b8ddb0 52% 78%,#7fd28d 78% 100%)}
+    .pin{position:absolute;top:-5px;width:9px;height:9px;border:2px solid #2a3038;background:#f6dd55;border-radius:3px;transform:translateX(-50%) rotate(45deg)}
+    .scale{display:grid;grid-template-columns:repeat(5,1fr);font-size:11px;color:#adb4bc;margin-top:5px;text-align:center}
+    .summary-grid{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line);margin-top:8px}
+    .summary-cell{padding:10px 10px 8px;border-right:1px solid var(--line-soft)}
+    .summary-cell:last-child{border-right:0}
+    .summary-cell small{display:block;font-size:11px;text-transform:uppercase;color:#9fa7b1;font-weight:800;margin-bottom:4px;letter-spacing:.06em}
+    .summary-cell b{font-size:15px}
+    .summary-cell .gain{color:#38975b}
+    .alert{margin-top:8px;padding:9px 10px;border-radius:8px;background:#fff7df;border:1px solid #efdfb1;color:#8f7729;font-size:12px;line-height:1.5}
+    .alert + .alert{margin-top:6px}
+    .result-actions{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:8px}
+    .result-actions .btn{padding:9px 10px;font-size:14px}
+
+    .analysis{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+    .mini-card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px;box-shadow:var(--shadow)}
+    .mini-title{font-size:14px;font-weight:800;margin-bottom:2px}
+    .mini-sub{font-size:11px;color:#a1a8b2;margin-bottom:8px}
+    .mini-flex{display:flex;align-items:center;gap:10px}
+    .donut{width:74px;height:74px;border-radius:50%;position:relative;flex:0 0 74px}
+    .donut::after{content:attr(data-label);white-space:pre;position:absolute;inset:16px;background:#fff;border-radius:50%;display:grid;place-items:center;text-align:center;font-size:11px;font-weight:800;color:#67707c;line-height:1.15}
+    .legend{flex:1;display:grid;gap:4px;font-size:11px;color:#666f7a}
+    .legend div{display:flex;justify-content:space-between;gap:8px}
+    .legend i{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:5px;vertical-align:middle}
+    .barlist{display:grid;gap:5px;font-size:11px}
+    .barrow{display:grid;grid-template-columns:84px 1fr 44px;gap:8px;align-items:center}
+    .hbar{height:6px;border-radius:999px;background:#f0f3f7;overflow:hidden}
+    .hbar span{display:block;height:100%;border-radius:inherit;background:#d0a24b}
+    .tiktok .hbar span{background:linear-gradient(90deg,#ffc6d4,#ff4f7a)}
+
+    .deep-card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px;box-shadow:var(--shadow)}
+    .deep-kicker{font-size:12px;font-weight:800;color:#c4962d;text-transform:uppercase;margin-bottom:7px;letter-spacing:.06em}
+    .deep-main{font-size:13px;font-weight:800;color:#a46c13;margin-bottom:4px;letter-spacing:.06em}
+    .diag{font-size:18px;font-weight:800;color:#cb8a1d;margin-bottom:5px;letter-spacing:-.01em}
+    .diag.tiktok{color:#cf4467}
+    .deep-text{font-size:12px;color:#7d8591;line-height:1.55;margin-bottom:10px}
+    .goal-title{font-size:12px;text-transform:uppercase;color:#ad9c73;font-weight:800;margin-bottom:6px;letter-spacing:.05em}
+    .goal-title.tiktok{color:#b87387}
+    .deep-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .deep-box{border:1px solid var(--line);border-radius:10px;padding:10px;background:#fff}
+    .deep-box small{display:block;color:#9ca4ae;font-size:11px;font-weight:800;margin-bottom:4px;letter-spacing:.04em}
+    .deep-box b{display:block;font-size:20px;margin-bottom:2px;letter-spacing:-.02em}
+    .deep-box span{display:block;font-size:11px;color:#a0a7b0}
+    .tips-hd{margin:10px 0 6px;font-size:12px;color:#a09474;text-transform:uppercase;font-weight:800;letter-spacing:.05em}
+    .tips-hd.tiktok{color:#b07b89}
+    .tip-item{border:1px solid var(--line);border-radius:8px;padding:7px 9px;font-size:11px;color:#6d7782;margin-bottom:5px;background:#fff;line-height:1.5}
+    .act-hd{margin:8px 0 6px;font-size:12px;color:#a09474;text-transform:uppercase;font-weight:800;letter-spacing:.05em}
+    .act-hd.tiktok{color:#b07b89}
+    .action-item{font-size:11px;color:#676f7c;line-height:1.55;margin-bottom:4px;display:flex;gap:5px}
+    .action-dot{width:10px;height:10px;flex:0 0 10px;border-radius:50%;display:grid;place-items:center;font-size:11px;font-weight:800;color:#fff;background:#d7aa46;margin-top:1px}
+    .tiktok .action-dot{background:#ff527b}
+    .deep-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:8px}
+    .deep-metric{border:1px solid #d8ead9;border-radius:10px;padding:8px 10px;background:#fafffb}
+    .deep-metric small{display:block;font-size:11px;color:#a1a7b2;font-weight:800;text-transform:uppercase;margin-bottom:3px;letter-spacing:.05em}
+    .deep-metric b{font-size:15px}
+
+    .scenario-box{background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px;box-shadow:var(--shadow)}
+    .scenario-row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+    .scenario-title{font-size:14px;font-weight:700}
+    .scenario-sub{font-size:11px;color:#a0a7b0;margin-top:4px}
+    .scenario-actions{display:flex;gap:8px}
+
+    .bulk-config{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .overview-card{background:#fbfffc;border:1px solid #cfe5d5;border-radius:16px;padding:12px;box-shadow:var(--shadow)}
+    .overview-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+    .overview-top b{font-size:15px;color:#a2822d}
+    .overview-top .pct-big{font-size:19px;font-weight:800;color:#232831}
+    .overview-sub{font-size:12px;color:#8ba08b;margin-top:2px}
+    .overview-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:10px}
+    .overview-grid .box{border:1px solid var(--line);background:#fff;border-radius:10px;padding:8px 10px}
+    .overview-grid .box small{display:block;font-size:11px;color:#a0a7b0;font-weight:800;text-transform:uppercase;margin-bottom:3px;letter-spacing:.05em}
+    .overview-grid .box b{font-size:15px}
+
+    .sum-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+    .sum-card{border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px 12px;box-shadow:var(--shadow)}
+    .sum-card small{display:block;font-size:12px;text-transform:uppercase;color:#a1a8b1;font-weight:800;margin-bottom:4px;letter-spacing:.05em}
+    .sum-card b{font-size:15px}
+    .sum-card:nth-child(1){background:#fffaf0}
+    .sum-card:nth-child(2){background:#f5fcf6}
+    .sum-card:nth-child(3){background:#fff5f7}
+    .sum-card:nth-child(4){background:#fbfbfb}
+
+    .table-tools{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:10px 0}
+    .left-tools{display:flex;align-items:center;gap:8px;flex:1}
+    .search{position:relative;flex:0 0 280px}
+    .search input{width:100%;padding:7px 10px 7px 26px;border:1px solid var(--line);border-radius:8px;font-size:13px;outline:none;background:#fff}
+    .search::before{content:"⌕";position:absolute;left:9px;top:50%;transform:translateY(-50%);color:#a2aab4;font-size:16px;font-weight:800}
+    .table-tools small{font-size:13px;color:#7f8792}
+    .table-actions{display:flex;gap:8px}
+    .table-actions .btn{padding:7px 9px;font-size:13px}
+    .table-wrap{border:1px solid #dfe6ee;border-radius:14px;overflow:auto;background:#fff;box-shadow:var(--shadow)}
+    table{width:100%;border-collapse:collapse;font-size:13px;min-width:1280px;table-layout:fixed}
+    thead tr.group th{font-size:12px;text-transform:uppercase;color:#96a0ab;padding:8px 6px;border-bottom:1px solid #e7ebf0;background:#f6fafc;font-weight:800;letter-spacing:.04em}
+    thead tr.group th.fixed-hd{background:#f7eed8;color:#9b7a2b}
+    thead tr.group th.var-hd{background:#dfedf9;color:#4686ad}
+    thead tr.group th.res-hd{background:#e8f6e8;color:#5f9665}
+    thead tr.cols th{padding:7px 6px;border-bottom:1px solid #e7ebf0;color:#9ea7b2;font-weight:800;background:#fff;font-size:12px}
+    tbody td{padding:7px 6px;border-bottom:1px solid #eef2f6;vertical-align:middle}
+    tbody td:nth-child(7){background:#faf1dd}
+    tbody td:nth-child(8){background:#f7eed8}
+    tbody td:nth-child(9){background:#e5f0fb}
+    tbody td:nth-child(10),tbody td:nth-child(11){font-weight:800}
+    tbody tr:hover{background:#fcfdfe}
+    tfoot td{padding:8px 6px;font-weight:800;border-top:1px solid #e4e9ef;background:#fffaf0;font-size:13px}
+    .cat-chip{display:inline-block;padding:3px 8px;border-radius:999px;background:#d8f4ef;color:#3b9d91;font-size:12px;font-weight:800}
+    .cell-input{width:100%;border:0;background:transparent;font-size:13px;font-weight:700;color:#2b333e;outline:none}
+    .col-check{width:36px}.col-stt{width:42px}.col-name{width:220px}.col-cat{width:230px}
+    .col-cost,.col-price{width:92px}.col-suggest{width:112px}.col-fee{width:108px}.col-profit{width:106px}.col-rate{width:96px}.col-action{width:52px}
+    .move-cell{display:flex;align-items:center;justify-content:center;gap:4px}
+    .move-btn{width:26px;height:26px;border:1px solid #dde3eb;border-radius:7px;background:#fff;color:#7b8490;font-size:12px;font-weight:900;cursor:pointer;line-height:1}
+    .move-btn:hover{background:#f4f7fb;color:#283342}
+    .drag-handle{cursor:grab;user-select:none;background:#fff7e8;border-color:#eadcc0;color:#ad8128}
+    tr.dragging{opacity:.45}
+    tr.drag-over{outline:2px dashed #d6a948;outline-offset:-2px;background:#fffaf0}
+    .align-r{text-align:right}
+    .center{text-align:center}
+    .gain{color:#43a15c}
+    .loss{color:#dc627c}
+
+    .hidden{display:none !important}
+    .kicker{font-size:12px;letter-spacing:.18em;color:#a4aab3;font-weight:700;text-transform:uppercase;margin-bottom:4px}
+    .spacer8{height:8px}
+    @media (max-width:900px){
+      .app{width:auto;margin:0 10px}
+      .grid-info,.toolbar-line,.fee-layout,.analysis,.deep-grid,.bulk-config,.sum-grid,.overview-grid,.summary-grid,.result-actions,.deep-metrics,.industry-tools,.product-info-grid,.bulk-meta-grid,.profit-goal-grid{grid-template-columns:1fr}
+      .fee-layout{grid-template-columns:1fr}
+      .actions,.table-tools,.scenario-row,.top-row,.bulk-head{flex-direction:column;align-items:stretch}
+      .search{flex:1}
+    }
+  
+    /* vFinal_v37: tăng thêm size chữ toàn bộ app */
+    input,select,textarea,button{font-size:inherit}
+    td,th{line-height:1.35}
+</style>
+</head>
+<body>
+  <div class="app" id="app"></div>
+  <div class="modal-backdrop" id="customFeeModal" onclick="if(event.target.id==='customFeeModal') closeCustomFeeModal()">
+    <div class="fee-modal">
+      <div class="fee-modal-head">
+        <div>
+          <div class="fee-modal-title">Thêm khoản phí tùy chỉnh</div>
+          <div class="fee-modal-sub">Đặt tên, mô tả và chọn cách tính phí theo doanh thu, lợi nhuận hoặc số tiền cố định.</div>
+        </div>
+        <button class="modal-close" onclick="closeCustomFeeModal()">×</button>
+      </div>
+      <div class="fee-modal-body">
+        <div class="modal-field">
+          <label>Tên khoản phí</label>
+          <input id="cfName" placeholder="VD: Voucher livestream">
+        </div>
+        <div class="modal-field">
+          <label>Cách tính</label>
+          <select id="cfType" onchange="updateCustomFeeUnit()">
+            <option value="percent">Theo % doanh thu</option>
+            <option value="percentProfit">Theo % lợi nhuận</option>
+            <option value="money">Theo số tiền</option>
+          </select>
+        </div>
+        <div class="modal-field full">
+          <label>Mô tả khoản phí</label>
+          <textarea id="cfDesc" placeholder="VD: Áp dụng khi chạy voucher shop hoặc deal livestream"></textarea>
+        </div>
+        <div class="modal-field">
+          <label>Giá trị phí <span id="cfValueUnit">%</span></label>
+          <input id="cfValue" placeholder="VD: 5.5">
+        </div>
+        <div class="fee-condition-note">
+          Có thể bật điều kiện áp dụng theo giá trị đơn hàng tối thiểu và giới hạn số tiền giảm tối đa. Nếu không bật, khoản phí sẽ áp dụng cho mọi đơn.
+        </div>
+        <div class="toggle-line">
+          <div><span>Giới hạn đơn tối thiểu</span><small>Chỉ áp dụng khi giá bán đạt ngưỡng</small></div>
+          <label class="switch"><input id="cfMinEnabled" type="checkbox" onchange="document.getElementById('cfMinOrder').disabled=!this.checked"><span class="track"><span class="thumb"></span></span></label>
+        </div>
+        <div class="modal-field">
+          <label>Giá trị đơn tối thiểu</label>
+          <input id="cfMinOrder" placeholder="VD: 150000" disabled>
+        </div>
+        <div class="toggle-line">
+          <div><span>Giới hạn giảm tối đa</span><small>Khoản phí không vượt quá số tiền này</small></div>
+          <label class="switch"><input id="cfMaxEnabled" type="checkbox" onchange="document.getElementById('cfMaxAmount').disabled=!this.checked"><span class="track"><span class="thumb"></span></span></label>
+        </div>
+        <div class="modal-field">
+          <label>Số tiền giảm tối đa</label>
+          <input id="cfMaxAmount" placeholder="VD: 50000" disabled>
+        </div>
+      </div>
+      <div class="fee-modal-actions">
+        <button class="btn" onclick="closeCustomFeeModal()">Hủy</button>
+        <button class="btn primary" onclick="submitCustomFee()">Thêm khoản phí</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const defaultIndustries = {
+      shopee: [
+        {name:'Sắc Đẹp & Làm Đẹp', level1:'Sắc Đẹp', nonmall:16.50, mall:19.10, stt:1},
+        {name:'Mẹ & Bé · Đồ chơi & sở thích', level1:'Mẹ & Bé', nonmall:7.00, mall:8.00, stt:2},
+        {name:'Mẹ & Bé · Đồ dùng ăn dặm', level1:'Mẹ & Bé', nonmall:7.00, mall:8.50, stt:3},
+        {name:'Thời Trang Nữ', level1:'Thời trang', nonmall:16.50, mall:19.10, stt:4},
+        {name:'Nhà cửa & Đời sống', level1:'Nhà cửa & Đời sống', nonmall:10.00, mall:12.00, stt:5},
+        {name:'Điện Thoại & Phụ Kiện', level1:'Điện thoại', nonmall:2.00, mall:2.50, stt:6},
+        {name:'Máy tính & Laptop', level1:'Máy tính', nonmall:2.00, mall:3.80, stt:7}
+      ],
+      tiktok: [
+        {name:'Mẹ & Bé · Đồ chơi & sở thích', level1:'Mẹ & Bé', nonmall:8.00, mall:8.00, stt:1},
+        {name:'Sắc Đẹp & Chăm sóc cá nhân', level1:'Sắc Đẹp', nonmall:7.70, mall:7.70, stt:2},
+        {name:'Thời trang nữ', level1:'Thời trang', nonmall:5.00, mall:5.00, stt:3},
+        {name:'Nhà cửa & Đời sống', level1:'Nhà cửa', nonmall:5.00, mall:5.00, stt:4},
+        {name:'Đồ điện tử', level1:'Điện tử', nonmall:3.00, mall:3.00, stt:5}
+      ]
+    };
+    function storageGet(key, fallback){
+      try{
+        const raw = window.localStorage ? localStorage.getItem(key) : null;
+        return raw ? JSON.parse(raw) : fallback;
+      }catch(e){
+        return fallback;
+      }
+    }
+    function storageSet(key, value){
+      try{
+        if(window.localStorage) localStorage.setItem(key, JSON.stringify(value));
+      }catch(e){}
+    }
+    let industryDB = storageGet('costcalc.industryDB', clone(defaultIndustries));
+
+    const defaults = {
+      shopee: {
+        fixed: [
+          {key:'coin', name:'Phí Cố Định', desc:'Khoản phí nền tảng', type:'percent', value:19.1, enabled:true},
+          {key:'tx', name:'Phí Xử Lý Giao Dịch', desc:'Thu trên đơn hàng thành công', type:'percent', value:6, enabled:true},
+          {key:'vt', name:'Phí Hạ Tầng', desc:'Cố định trên mỗi đơn', type:'money', value:3000, enabled:true},
+          {key:'ship', name:'Phí PiShip', desc:'Cố định trên mỗi đơn', type:'money', value:2700, enabled:true},
+          {key:'voucherx', name:'Phí Voucher Xtra', desc:'Tối đa 50,000đ/đơn', type:'percent', value:5.5, enabled:true, maxEnabled:true, maxAmount:50000},
+          {key:'vat', name:'Thuế GTGT', desc:'Tính trên doanh thu', type:'percent', value:1, enabled:true},
+          {key:'incomeTax', name:'Thuế TNCN/DN', desc:'TNCN 17% theo lợi nhuận', type:'percentProfit', value:17, enabled:true}
+        ],
+        variable: [
+          {key:'ads', name:'Phí Quảng Cáo', desc:'Shopee Ads, CPM, CPC...', type:'percent', value:8, enabled:true},
+          {key:'af', name:'Phí Affiliate', desc:'Hoa hồng cho người giới thiệu', type:'percent', value:3, enabled:true},
+          {key:'oper', name:'Phí Vận Hành / Đơn', desc:'Đóng gói, xử lý đơn', type:'money', value:4000, enabled:true},
+          {key:'voucher', name:'Phí Voucher Shop', desc:'Voucher shop', type:'percent', value:2, enabled:true},
+          {key:'other', name:'Chi Phí Khác', desc:'Phát sinh ngoài bảng', type:'percent', value:2, enabled:true}
+        ]
+      },
+      tiktok: {
+        fixed: [
+          {key:'support', name:'Phí Hoa Hồng Nền Tảng', desc:'TikTok Shop commission', type:'percent', value:0, enabled:true},
+          {key:'tx', name:'Phí Giao Dịch', desc:'Phí thanh toán thành công', type:'percent', value:6, enabled:true},
+          {key:'ht', name:'Phí Xử Lý Đơn Hàng', desc:'Cố định trên mỗi đơn', type:'money', value:3000, enabled:true},
+          {key:'vextra', name:'Phí Voucher Xtra', desc:'Tối đa 50,000đ/đơn', type:'percent', value:5, enabled:true, maxEnabled:true, maxAmount:50000},
+          {key:'refund', name:'Phí Bồi Hoàn Vận Chuyển', desc:'Khoản hoàn chuyển đổi', type:'money', value:1620, enabled:true},
+          {key:'vat', name:'Thuế GTGT', desc:'Tính trên doanh thu', type:'percent', value:1, enabled:true},
+          {key:'incomeTax', name:'Thuế TNCN/DN', desc:'TNCN 17% theo lợi nhuận', type:'percentProfit', value:17, enabled:true}
+        ],
+        variable: [
+          {key:'ads', name:'Phí Quảng Cáo', desc:'TikTok Ads', type:'percent', value:5, enabled:true},
+          {key:'af', name:'Phí Affiliate', desc:'Hoa hồng creator / KOC', type:'percent', value:5, enabled:true},
+          {key:'oper', name:'Phí Vận Hành / Đơn', desc:'Đóng gói, xử lý, chiết khấu', type:'money', value:4000, enabled:true},
+          {key:'voucher', name:'Phí Voucher Shop', desc:'Voucher shop', type:'percent', value:0, enabled:true},
+          {key:'other', name:'Chi Phí Khác', desc:'Phát sinh ngoại lệ', type:'percent', value:2, enabled:true}
+        ]
+      }
+    };
+
+    const initialProducts = [
+      {id:1,name:'ABC',cat:'Sắc Đẹp ·',cost:200000,price:400000,checked:false},
+      {id:2,name:'DEF',cat:'Sắc Đẹp ·',cost:220000,price:410000,checked:false},
+      {id:3,name:'GHK',cat:'Sắc Đẹp ·',cost:150000,price:280000,checked:false},
+      {id:4,name:'MNO',cat:'Sắc Đẹp ·',cost:350000,price:780000,checked:false}
+    ];
+
+    function normalizeFee(f, fallback){
+      const base = Object.assign({}, fallback || {}, f || {});
+      if(!base.key) base.key = 'fee_' + Date.now() + Math.random().toString(16).slice(2);
+      if(!base.name) base.name = 'Khoản phí';
+      if(!base.desc) base.desc = 'Khoản phí tùy chỉnh';
+      if(!['percent','percentProfit','money'].includes(base.type)) base.type = 'percent';
+      base.value = Number(base.value || 0);
+      base.enabled = base.enabled !== false;
+      base.minEnabled = !!base.minEnabled;
+      base.minOrder = Number(base.minOrder || 0);
+      base.maxEnabled = !!base.maxEnabled;
+      base.maxAmount = Number(base.maxAmount || 0);
+      if(base.key === 'voucherx' || base.key === 'vextra'){
+        base.name = base.key === 'vextra' ? 'Phí Voucher Xtra' : base.name;
+        base.desc = 'Tối đa 50,000đ/đơn';
+        base.maxEnabled = true;
+        base.maxAmount = 50000;
+      }
+      return base;
+    }
+    function normalizeFees(input){
+      const out = clone(defaults);
+      ['shopee','tiktok'].forEach(platform=>{
+        ['fixed','variable'].forEach(group=>{
+          const saved = input && input[platform] && Array.isArray(input[platform][group]) ? input[platform][group] : [];
+          const baseList = out[platform][group];
+          const merged = [];
+          baseList.forEach(def=>{
+            const found = saved.find(x => x && (x.key === def.key || (def.key === 'incomeTax' && ['tncn','tndn'].includes(x.key))));
+            merged.push(normalizeFee(found || def, def));
+          });
+          saved.forEach(item=>{
+            if(item && !(['tncn','tndn'].includes(item.key) && merged.some(x=>x.key === 'incomeTax')) && !merged.some(x=>x.key === item.key)) merged.push(normalizeFee(item));
+          });
+          out[platform][group] = merged;
+        });
+      });
+      return out;
+    }
+
+    const savedProductsByPlatform = storageGet('costcalc.productsByPlatform', null);
+    const legacyProducts = storageGet('costcalc.products', null);
+
+    let state = {
+      platform:'shopee',
+      mode:'single',
+      shopType:'Shop Mall',
+      business:'HKD > 3 tỷ (1% GTGT + 17% TNCN/LN)',
+      cost:200000,
+      price:400000,
+      productName:'VD: Áo thun nam mùa hè',
+      category:'Sắc Đẹp & Làm Đẹp',
+      fees: normalizeFees(storageGet('costcalc.fees', clone(defaults))),
+      productsByPlatform: savedProductsByPlatform || {
+        shopee: Array.isArray(legacyProducts) ? legacyProducts : clone(initialProducts),
+        tiktok: clone(initialProducts).map((p,i)=>({...p, id:1000+i, name:['TikTok SP A','TikTok SP B','TikTok SP C','TikTok SP D'][i] || p.name}))
+      },
+      bulkGoal: storageGet('costcalc.bulkGoal', {mode:'percent', percentBase:'dt', value:15}),
+      scenarios: storageGet('costcalc.scenarios', [])
+    };
+    if(!state.productsByPlatform || typeof state.productsByPlatform !== 'object') state.productsByPlatform = {shopee:clone(initialProducts), tiktok:clone(initialProducts)};
+    if(!Array.isArray(state.productsByPlatform.shopee)) state.productsByPlatform.shopee = clone(initialProducts);
+    if(!Array.isArray(state.productsByPlatform.tiktok)) state.productsByPlatform.tiktok = clone(initialProducts).map((p,i)=>({...p, id:1000+i, name:['TikTok SP A','TikTok SP B','TikTok SP C','TikTok SP D'][i] || p.name}));
+    if(!state.bulkGoal || typeof state.bulkGoal !== 'object') state.bulkGoal = {mode:'percent', percentBase:'dt', value:15};
+    if(!['percent','money'].includes(state.bulkGoal.mode)) state.bulkGoal.mode = 'percent';
+    if(!['dt','gv'].includes(state.bulkGoal.percentBase)) state.bulkGoal.percentBase = 'dt';
+    state.bulkGoal.value = Number(state.bulkGoal.value || (state.bulkGoal.mode === 'money' ? 50000 : 15));
+    if(!Array.isArray(state.scenarios)) state.scenarios = [];
+    state.shopType = (String(state.shopType||'').toLowerCase().includes('mall')) ? 'Shop Mall' : 'Shop thường';
+
+    function money(n){
+      const v = Math.round(Number(n||0));
+      return v.toLocaleString('vi-VN') + 'đ';
+    }
+    function fmt(n, d=2){ return Number(n||0).toLocaleString('vi-VN',{minimumFractionDigits:d,maximumFractionDigits:d}); }
+    function pct(n, d=2){ return (Number(n||0)).toLocaleString('vi-VN',{minimumFractionDigits:d,maximumFractionDigits:d}) + '%'; }
+    function number(v){ return Number(String(v).replace(/[^0-9.-]/g,'')) || 0; }
+    function feeUnit(type){ return type === 'money' ? 'đ' : '%'; }
+    function clone(obj){ return JSON.parse(JSON.stringify(obj)); }
+    function currentProducts(){
+      if(!state.productsByPlatform) state.productsByPlatform = {shopee:clone(initialProducts), tiktok:clone(initialProducts)};
+      if(!Array.isArray(state.productsByPlatform[state.platform])) state.productsByPlatform[state.platform] = clone(initialProducts);
+      return state.productsByPlatform[state.platform];
+    }
+    function setCurrentProducts(list){ state.productsByPlatform[state.platform] = Array.isArray(list) ? list : []; }
+
+    let productDrafts = {};
+    function draftKey(id, key){ return state.platform + ':' + id + ':' + key; }
+    function draftValue(product, key){
+      const k = draftKey(product.id, key);
+      if(Object.prototype.hasOwnProperty.call(productDrafts, k)) return productDrafts[k];
+      return product[key] ?? '';
+    }
+    function cacheProductEdit(id, key, value){
+      productDrafts[draftKey(id, key)] = value;
+      clearTimeout(renderTimer);
+      clearTimeout(saveStateTimer);
+    }
+    function commitProductEdit(id, key, value){
+      const p = currentProducts().find(x=>x.id===id);
+      if(!p) return;
+      p[key] = (key === 'cost' || key === 'price') ? number(value) : value;
+      clearCalcCaches();
+      delete productDrafts[draftKey(id, key)];
+      saveState();
+      render();
+    }
+
+    let saveStateTimer = null;
+    let renderTimer = null;
+    let calcCache = new Map();
+    let suggestCache = new Map();
+    let normTextCache = new Map();
+    let industryFindCache = new Map();
+    let categoryRateCache = new Map();
+    let calcVersion = 1;
+    function saveStateDebounced(delay=500){
+      clearTimeout(saveStateTimer);
+      saveStateTimer = setTimeout(()=>saveState(), delay);
+    }
+    function feeSignature(){
+      return `${state.platform}|${normalizeShopType(state.shopType)}|${state.business}|v${calcVersion}`;
+    }
+    function ensureCalcCacheFresh(){
+      return feeSignature();
+    }
+    function clearCalcCaches(){
+      calcVersion++;
+      if(calcVersion > 1000000000) calcVersion = 1;
+      calcCache.clear();
+      suggestCache.clear();
+      industryFindCache.clear();
+      categoryRateCache.clear();
+    }
+    function isActiveTypingField(){
+      const el = document.activeElement;
+      if(!el) return false;
+      if(el.classList && el.classList.contains('cell-input')) return true;
+      if(el.id === 'tableSearch') return true;
+      if(el.dataset && el.dataset.liveEdit === '1') return true;
+      return false;
+    }
+    function scheduleRender(delay=180){
+      clearTimeout(renderTimer);
+      renderTimer = setTimeout(()=>{
+        if(isActiveTypingField()){ scheduleRender(450); return; }
+        render();
+      }, delay);
+    }
+
+    function normalizeText(s){
+      const raw = String(s||'');
+      if(normTextCache.has(raw)) return normTextCache.get(raw);
+      const v = raw.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d').replace(/[^a-z0-9]+/g,' ').trim();
+      normTextCache.set(raw, v);
+      if(normTextCache.size > 4000) normTextCache.clear();
+      return v;
+    }
+    function currentIndustries(){ return industryDB[state.platform] || []; }
+    function shopRateKey(){ return normalizeShopType(state.shopType) === 'Shop Mall' ? 'mall' : 'nonmall'; }
+    function isIndustryFee(f){ return ['coin','support','platform','commission','industry'].includes(f.key) || /ngành hàng|hoa hồng nền tảng|cố định/i.test(f.name); }
+    function isVoucherShopFee(f){ return f && (f.key === 'voucher' || /voucher\s*shop/i.test(normalizeText(f.name || '')) || normalizeText(f.name || '').includes('phi voucher shop')); }
+    function displayBase(result){ return Number(result?.revenue || result?.price || 0); }
+    function findIndustry(categoryName=state.category, allowFallback=true){
+      const arr = currentIndustries();
+      if(!arr.length) return null;
+      const q = normalizeText(categoryName);
+      const cacheKey = `${state.platform}|${arr.length}|${allowFallback?'1':'0'}|${q}`;
+      if(industryFindCache.has(cacheKey)) return industryFindCache.get(cacheKey);
+      let found = null;
+      for(let i=0;i<arr.length;i++){
+        const n = normalizeText(arr[i].name);
+        if(n === q){ found = arr[i]; break; }
+      }
+      if(!found){
+        for(let i=0;i<arr.length;i++){
+          const n = normalizeText(arr[i].name);
+          if(n.includes(q) || q.includes(n)){ found = arr[i]; break; }
+        }
+      }
+      const result = found || (allowFallback ? arr[0] : null);
+      industryFindCache.set(cacheKey, result);
+      if(industryFindCache.size > 2000) industryFindCache.clear();
+      return result;
+    }
+    function currentCategoryRate(categoryName=state.category){
+      const key = `${state.platform}|${shopRateKey()}|${currentIndustries().length}|${normalizeText(categoryName)}`;
+      if(categoryRateCache.has(key)) return categoryRateCache.get(key);
+      const ind = findIndustry(categoryName, true);
+      const rate = ind ? (Number(ind[shopRateKey()] ?? ind.mall ?? ind.nonmall ?? ind.rate ?? 0) || 0) : 0;
+      categoryRateCache.set(key, rate);
+      if(categoryRateCache.size > 2000) categoryRateCache.clear();
+      return rate;
+    }
+    function effectiveCategory(categoryName=state.category){
+      const ind = findIndustry(categoryName, true);
+      return ind ? ind.name : (categoryName || state.category);
+    }
+    function applyCategoryFee(categoryName=state.category){
+      const fee = (state.fees[state.platform].fixed || []).find(isIndustryFee);
+      const ind = findIndustry(categoryName, true);
+      if(fee && ind){
+        fee.value = currentCategoryRate(categoryName);
+        fee.type = 'percent';
+        fee.desc = `${ind.level1 || 'Ngành hàng'} · ${normalizeShopType(state.shopType) === 'Shop Mall' ? 'Mall' : 'Non-Mall'} ${fmt(fee.value,2)}%`;
+      }
+    }
+    function industryOptionsHtml(){
+      return currentIndustries().map(x => `<option value="${escapeHtml(x.name)}">${escapeHtml(x.name)} · Mall ${fmt(x.mall,2)}% | Non-Mall ${fmt(x.nonmall,2)}%</option>`).join('');
+    }
+    function escapeHtml(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));}
+    function updateCategoryInput(value){
+      state.category = value;
+      clearCalcCaches();
+      applyCategoryFee(value);
+      saveState();
+      render();
+    }
+
+    function normalizeShopType(value){
+      const v = String(value || '').toLowerCase();
+      return v.includes('mall') ? 'Shop Mall' : 'Shop thường';
+    }
+    function setShopType(value){
+      state.shopType = normalizeShopType(value);
+      clearCalcCaches();
+      applyBusinessRules(state.business);
+      applyCategoryFee(state.category);
+      saveState();
+      render();
+    }
+    function shopTypeControl(){
+      const mallActive = normalizeShopType(state.shopType) === 'Shop Mall';
+      return `<div class="shop-type-toggle">
+        <button type="button" class="shop-type-option ${mallActive?'active':''}" onclick="setShopType('Shop Mall')">Shop Mall</button>
+        <button type="button" class="shop-type-option ${!mallActive?'active':''}" onclick="setShopType('Shop thường')">Shop thường</button>
+      </div>`;
+    }
+    function renderIndustryTools(){
+      return `<div class="industry-tools">
+        <div class="industry-tool-card">
+          <label>Upload Excel bảng phí ngành hàng</label>
+          <label class="btn" style="display:inline-flex;align-items:center;justify-content:center;width:100%;margin:0;cursor:pointer">⇪ Upload bảng phí ${state.platform==='shopee'?'Shopee':'TikTok'}<input type="file" accept=".xlsx,.xls" hidden onchange="uploadIndustryExcel(event)"></label>
+          <div class="industry-hint">Shopee: dùng file PHI-CO-DINH-SHOPEE.xlsx. TikTok: dùng file PHI-HOA-HONG-TIKTOK.xlsx.</div>
+        </div>
+        <div class="industry-tool-card">
+          <label>Trạng thái bảng phí</label>
+          <div class="industry-status">Đang dùng ${currentIndustries().length} dòng ngành hàng ${state.platform==='shopee'?'Shopee':'TikTok'}.</div>
+          <div style="display:flex;gap:8px;margin-top:8px"><button class="btn" onclick="resetIndustryTable()">Reset mẫu</button><button class="btn" onclick="exportIndustryTemplate()">Xuất mẫu</button></div>
+        </div>
+      </div>`;
+    }
+
+    function isFeeApplicable(fee, price){
+      if(fee.minEnabled && price < Number(fee.minOrder || 0)) return false;
+      return true;
+    }
+
+    function limitFeeAmount(fee, amount){
+      let v = Number(amount || 0);
+      if(fee.maxEnabled && Number(fee.maxAmount || 0) > 0) v = Math.min(v, Number(fee.maxAmount || 0));
+      return v;
+    }
+
+    function feeAmount(fee, cost, price, categoryName=state.category, profitBase=0, revenueBase=null){
+      if(!fee.enabled || !isFeeApplicable(fee, price)) return 0;
+      const value = isIndustryFee(fee) ? currentCategoryRate(categoryName) : Number(fee.value || 0);
+      const base = isVoucherShopFee(fee) ? price : (revenueBase === null || revenueBase === undefined ? price : Number(revenueBase || 0));
+      let amt = 0;
+      if(fee.type === 'money') amt = value;
+      else if(fee.type === 'percent') amt = base * value / 100;
+      else if(fee.type === 'percentProfit') amt = Math.max(Number(profitBase || 0), 0) * value / 100;
+      return limitFeeAmount(fee, amt);
+    }
+
+    function voucherShopAmount(cost, price, categoryName=state.category){
+      const fixed = state.fees[state.platform].fixed || [];
+      const variable = state.fees[state.platform].variable || [];
+      let total = 0;
+      [...fixed, ...variable].forEach(f => {
+        if(f.type !== 'percentProfit' && isVoucherShopFee(f)) total += feeAmount(f, cost, price, categoryName, 0, price);
+      });
+      return total;
+    }
+
+    function calcOne(cost, price, categoryName=state.category){
+      cost = Number(cost || 0);
+      price = Number(price || 0);
+      categoryName = effectiveCategory(categoryName || state.category);
+      const sig = ensureCalcCacheFresh();
+      const cacheKey = `${sig}|${normalizeText(categoryName)}|${cost}|${price}`;
+      if(calcCache.has(cacheKey)) return {...calcCache.get(cacheKey)};
+
+      const fixed = state.fees[state.platform].fixed || [];
+      const variable = state.fees[state.platform].variable || [];
+      let fsum = 0, vsum = 0;
+      let fixedVoucherShop = 0, variableVoucherShop = 0;
+
+      fixed.forEach(f => {
+        if(f.type !== 'percentProfit' && isVoucherShopFee(f)){
+          const amt = feeAmount(f, cost, price, categoryName, 0, price);
+          fixedVoucherShop += amt;
+          fsum += amt;
+        }
+      });
+      variable.forEach(f => {
+        if(f.type !== 'percentProfit' && isVoucherShopFee(f)){
+          const amt = feeAmount(f, cost, price, categoryName, 0, price);
+          variableVoucherShop += amt;
+          vsum += amt;
+        }
+      });
+
+      const voucherShop = fixedVoucherShop + variableVoucherShop;
+      const revenue = Math.max(price - voucherShop, 0);
+
+      fixed.forEach(f => { if(f.type !== 'percentProfit' && !isVoucherShopFee(f)) fsum += feeAmount(f, cost, price, categoryName, 0, revenue); });
+      variable.forEach(f => { if(f.type !== 'percentProfit' && !isVoucherShopFee(f)) vsum += feeAmount(f, cost, price, categoryName, 0, revenue); });
+
+      const profitBeforeProfitBasedFees = price - cost - fsum - vsum;
+      fixed.forEach(f => { if(f.type === 'percentProfit') fsum += feeAmount(f, cost, price, categoryName, profitBeforeProfitBasedFees, revenue); });
+      variable.forEach(f => { if(f.type === 'percentProfit') vsum += feeAmount(f, cost, price, categoryName, profitBeforeProfitBasedFees, revenue); });
+
+      const total = fsum + vsum;
+      const profit = price - cost - total;
+      const margin = revenue ? profit/revenue*100 : 0;
+      const fixedNoVoucher = Math.max(fsum - fixedVoucherShop, 0);
+      const variableNoVoucher = Math.max(vsum - variableVoucherShop, 0);
+      const result = {cost, price, revenue, voucherShop, fixedVoucherShop, variableVoucherShop, fixedNoVoucher, variableNoVoucher, fixed:fsum, variable:vsum, total, profit, margin};
+      calcCache.set(cacheKey, result);
+      if(calcCache.size > 2500) calcCache.clear();
+      return {...result};
+    }
+
+
+    function profitGoalPassed(result, cost, goal=state.bulkGoal){
+      const v = Number(goal.value || 0);
+      if(goal.mode === 'money') return result.profit >= v;
+      if(goal.percentBase === 'gv') return cost > 0 && (result.profit / cost * 100) >= v;
+      return displayBase(result) > 0 && (result.profit / displayBase(result) * 100) >= v;
+    }
+
+    function suggestedPriceForProduct(product, goal=state.bulkGoal){
+      const cost = Number(product.cost || 0);
+      const cat = effectiveCategory(product.cat || state.category);
+      const currentPrice = Math.max(Number(product.price || 0), 0);
+      const target = Number(goal.value || 0);
+      const sig = ensureCalcCacheFresh();
+      const key = `${sig}|goal:${goal.mode}|${goal.percentBase}|${target}|${normalizeText(cat)}|${cost}|${currentPrice}`;
+      if(suggestCache.has(key)) return suggestCache.get(key);
+
+      let answer = 0;
+      if(cost <= 0 && goal.mode !== 'money') answer = 0;
+      else if(target <= 0){
+        const base = calcOne(cost, currentPrice || cost || 1, cat);
+        answer = profitGoalPassed(base, cost, goal) ? currentPrice : Math.max(currentPrice, cost);
+      }else{
+        let low = 0;
+        let high = Math.max(currentPrice, cost * 1.25 + (goal.mode === 'money' ? target : 0), cost + 1000, 1000);
+        let guard = 0;
+        while(!profitGoalPassed(calcOne(cost, high, cat), cost, goal) && guard < 8){
+          high = high * 1.7 + 1000;
+          guard++;
+          if(high > 10000000000){ answer = null; break; }
+        }
+        if(answer !== null){
+          for(let i=0;i<7;i++){
+            const mid = (low + high) / 2;
+            if(profitGoalPassed(calcOne(cost, mid, cat), cost, goal)) high = mid;
+            else low = mid;
+          }
+          answer = Math.ceil(high/1000)*1000;
+        }
+      }
+      suggestCache.set(key, answer);
+      if(suggestCache.size > 2500) suggestCache.clear();
+      return answer;
+    }
+
+    function renderProfitGoalCard(){
+      const goal = state.bulkGoal;
+      const unit = goal.mode === 'money' ? 'đ' : '%';
+      return `
+        <div class="profit-goal-card">
+          <div class="profit-goal-head">
+            <div>
+              <div class="profit-goal-title">Mục tiêu lợi nhuận</div>
+              <div class="profit-goal-sub">Dùng để tính cột Giá gợi ý cho từng sản phẩm trong bảng.</div>
+            </div>
+            <div class="tag-rate">Giá gợi ý tự động</div>
+          </div>
+          <div class="profit-goal-grid">
+            <div class="field"><label>Kiểu mục tiêu</label><select onchange="updateBulkGoal('mode',this.value)"><option value="percent" ${goal.mode==='percent'?'selected':''}>Theo % lợi nhuận</option><option value="money" ${goal.mode==='money'?'selected':''}>Theo số tiền lợi nhuận</option></select><div class="hint">${goal.mode==='percent'?'Tính theo tỷ lệ lợi nhuận':'Tính theo số tiền lãi ròng'}</div></div>
+            <div class="field"><label>Điều kiện theo %</label><select ${goal.mode==='money'?'disabled':''} onchange="updateBulkGoal('percentBase',this.value)"><option value="dt" ${goal.percentBase==='dt'?'selected':''}>%LN/DT</option><option value="gv" ${goal.percentBase==='gv'?'selected':''}>%LN/GV</option></select><div class="hint">${goal.mode==='money'?'Không áp dụng khi chọn số tiền':'Chọn nền tính % mục tiêu'}</div></div>
+            <div class="field accent"><label>Giá trị mục tiêu (${unit})</label><input data-live-edit="1" value="${goal.value}" oninput="updateBulkGoal('value',this.value)" onblur="render()"><div class="hint">${goal.mode==='money'?'VD: 50000đ lợi nhuận/SP':'VD: 15% lợi nhuận'}</div></div>
+          </div>
+        </div>`;
+    }
+
+    function calcRowAmount(fee, cost, price, categoryName=state.category){
+      categoryName = effectiveCategory(categoryName || state.category);
+      const fixed = state.fees[state.platform].fixed || [];
+      const variable = state.fees[state.platform].variable || [];
+
+      if(isVoucherShopFee(fee)) return feeAmount(fee, cost, price, categoryName, 0, price);
+
+      let voucher = 0;
+      [...fixed, ...variable].forEach(f => {
+        if(f !== fee && f.type !== 'percentProfit' && isVoucherShopFee(f)) voucher += feeAmount(f, cost, price, categoryName, 0, price);
+      });
+      const revenue = Math.max(Number(price || 0) - voucher, 0);
+
+      let baseFixed = 0, baseVar = 0;
+      fixed.forEach(f => {
+        if(f !== fee && f.type !== 'percentProfit') baseFixed += feeAmount(f, cost, price, categoryName, 0, isVoucherShopFee(f) ? price : revenue);
+      });
+      variable.forEach(f => {
+        if(f !== fee && f.type !== 'percentProfit') baseVar += feeAmount(f, cost, price, categoryName, 0, isVoucherShopFee(f) ? price : revenue);
+      });
+      const profitBase = Number(price || 0) - Number(cost || 0) - baseFixed - baseVar;
+      return feeAmount(fee, cost, price, categoryName, profitBase, revenue);
+    }
+
+    function saveState(){
+      storageSet('costcalc.fees', state.fees);
+      storageSet('costcalc.productsByPlatform', state.productsByPlatform);
+      storageSet('costcalc.bulkGoal', state.bulkGoal);
+      storageSet('costcalc.products', currentProducts());
+      storageSet('costcalc.scenarios', state.scenarios);
+      storageSet('costcalc.industryDB', industryDB);
+    }
+
+    function setPlatform(p){
+      state.platform = p;
+      clearCalcCaches();
+      if(!findIndustry(state.category, false)){
+        state.category = (currentIndustries()[0]||{}).name || '';
+      }
+      applyBusinessRules(state.business);
+      applyCategoryFee(state.category);
+      saveState();
+      render();
+    }
+    function setMode(m){ state.mode = m; clearCalcCaches(); applyBusinessRules(state.business); applyCategoryFee(); render(); }
+
+    function getIncomeTaxFee(){
+      const fixed = state.fees[state.platform].fixed || [];
+      let income = fixed.find(f => ['incomeTax','tncn','tndn'].includes(f.key));
+      if(!income){
+        income = fixed.find(f => /thuế\s*(tncn|tndn|tncn\/dn|dn)/i.test(f.name || ''));
+      }
+      if(!income){
+        income = {key:'incomeTax', name:'Thuế TNCN/DN', desc:'TNCN 17% theo lợi nhuận', type:'percentProfit', value:17, enabled:true, minEnabled:false, minOrder:0, maxEnabled:false, maxAmount:0};
+        fixed.push(income);
+      }
+      income.key = 'incomeTax';
+      income.name = 'Thuế TNCN/DN';
+      return income;
+    }
+
+    function getVatFee(){
+      const fixed = state.fees[state.platform].fixed || [];
+      let vat = fixed.find(f => f.key === 'vat') || fixed.find(f => /thuế\s*gtgt/i.test(f.name || ''));
+      if(!vat){
+        vat = {key:'vat', name:'Thuế GTGT', desc:'Tính trên doanh thu', type:'percent', value:1, enabled:true, minEnabled:false, minOrder:0, maxEnabled:false, maxAmount:0};
+        fixed.push(vat);
+      }
+      vat.key = 'vat';
+      vat.name = 'Thuế GTGT';
+      return vat;
+    }
+
+    function businessTaxConfig(value=state.business){
+      const v = String(value || '');
+      if(v.includes('HKD < 3')){
+        return {
+          vatValue:1,
+          vatDesc:'1% tính trên doanh thu',
+          incomeValue:0.5,
+          incomeType:'percent',
+          incomeDesc:'TNCN 0,5% tính trên doanh thu',
+          shortLabel:'HKD < 3 tỷ · GTGT 1% + TNCN 0,5%/doanh thu'
+        };
+      }
+      if(v.includes('Công ty')){
+        return {
+          vatValue:10,
+          vatDesc:'10% tính trên doanh thu',
+          incomeValue:20,
+          incomeType:'percentProfit',
+          incomeDesc:'TNDN 20% tính trên lợi nhuận',
+          shortLabel:'Công ty · GTGT 10% + TNDN 20%/lợi nhuận'
+        };
+      }
+      return {
+        vatValue:1,
+        vatDesc:'1% tính trên doanh thu',
+        incomeValue:17,
+        incomeType:'percentProfit',
+        incomeDesc:'TNCN 17% tính trên lợi nhuận',
+        shortLabel:'HKD > 3 tỷ · GTGT 1% + TNCN 17%/lợi nhuận'
+      };
+    }
+
+    function applyBusinessRules(value=state.business){
+      state.business = value || state.business;
+      const vat = getVatFee();
+      const income = getIncomeTaxFee();
+      const cfg = businessTaxConfig(state.business);
+
+      vat.name = 'Thuế GTGT';
+      vat.desc = cfg.vatDesc;
+      vat.type = 'percent';
+      vat.value = cfg.vatValue;
+      vat.enabled = true;
+
+      income.key = 'incomeTax';
+      income.name = 'Thuế TNCN/DN';
+      income.desc = cfg.incomeDesc;
+      income.type = cfg.incomeType;
+      income.value = cfg.incomeValue;
+      income.enabled = true;
+    }
+
+    function updateField(key, value, live=false){
+      if(key === 'cost' || key === 'price') state[key] = number(value);
+      else state[key] = key === 'shopType' ? normalizeShopType(value) : value;
+      clearCalcCaches();
+      applyBusinessRules(state.business);
+      if(key === 'shopType' || key === 'category') applyCategoryFee(state.category);
+      if(live){
+        saveStateDebounced();
+        clearTimeout(renderTimer);
+        return;
+      }
+      saveState();
+      render();
+    }
+
+    function updateBulkGoal(key, value){
+      if(!state.bulkGoal) state.bulkGoal = {mode:'percent', percentBase:'dt', value:15};
+      const prevMode = state.bulkGoal.mode;
+      if(key === 'value'){
+        state.bulkGoal.value = Number(String(value || '0').replace(',','.').replace(/[^0-9.-]/g,'')) || 0;
+        clearCalcCaches();
+        saveStateDebounced();
+        return;
+      }else{
+        state.bulkGoal[key] = value;
+        clearCalcCaches();
+      }
+      if(key === 'mode' && value !== prevMode){
+        state.bulkGoal.value = value === 'money' ? 50000 : 15;
+      }
+      saveState();
+      render();
+    }
+
+    function updateFee(group, idx, key, value){
+      const fee = state.fees[state.platform][group][idx];
+      fee[key] = value;
+      clearCalcCaches();
+      saveState();
+      render();
+    }
+
+    let pendingCustomFeeGroup = 'fixed';
+
+    function addCustomFee(group){
+      pendingCustomFeeGroup = group;
+      const modal = document.getElementById('customFeeModal');
+      if(!modal){
+        state.fees[state.platform][group].push({key:'custom'+Date.now(),name:'Khoản phí mới',desc:'Nhập tên và giá trị phí',type:'percent',value:0,enabled:true,minEnabled:false,minOrder:0,maxEnabled:false,maxAmount:0});
+        saveState(); render();
+        return;
+      }
+      document.getElementById('cfName').value = '';
+      document.getElementById('cfDesc').value = '';
+      document.getElementById('cfType').value = 'percent';
+      document.getElementById('cfValue').value = '';
+      document.getElementById('cfMinEnabled').checked = false;
+      document.getElementById('cfMinOrder').value = '';
+      document.getElementById('cfMaxEnabled').checked = false;
+      document.getElementById('cfMaxAmount').value = '';
+      document.getElementById('cfMinOrder').disabled = true;
+      document.getElementById('cfMaxAmount').disabled = true;
+      updateCustomFeeUnit();
+      modal.classList.add('show');
+    }
+
+    function closeCustomFeeModal(){
+      const modal = document.getElementById('customFeeModal');
+      if(modal) modal.classList.remove('show');
+    }
+
+    function updateCustomFeeUnit(){
+      const type = document.getElementById('cfType')?.value || 'percent';
+      const unit = type === 'money' ? 'đ' : '%';
+      const label = document.getElementById('cfValueUnit');
+      if(label) label.textContent = unit;
+    }
+
+    function submitCustomFee(){
+      const name = (document.getElementById('cfName').value || '').trim() || 'Khoản phí mới';
+      const desc = (document.getElementById('cfDesc').value || '').trim() || 'Khoản phí tùy chỉnh';
+      const type = document.getElementById('cfType').value;
+      const value = Number(String(document.getElementById('cfValue').value || '0').replace(',','.')) || 0;
+      const minEnabled = document.getElementById('cfMinEnabled').checked;
+      const maxEnabled = document.getElementById('cfMaxEnabled').checked;
+      const minOrder = number(document.getElementById('cfMinOrder').value);
+      const maxAmount = number(document.getElementById('cfMaxAmount').value);
+      state.fees[state.platform][pendingCustomFeeGroup].push({
+        key:'custom'+Date.now(),
+        name, desc, type, value, enabled:true,
+        minEnabled, minOrder, maxEnabled, maxAmount
+      });
+      closeCustomFeeModal();
+      saveState();
+      render();
+    }
+
+
+    function renameFee(group, idx, text){
+      const fee = state.fees[state.platform]?.[group]?.[idx];
+      if(!fee) return;
+      fee.name = String(text || '').trim() || 'Khoản phí';
+      clearCalcCaches();
+      saveState();
+      render();
+    }
+
+    function updateFeeValue(group, idx, val, live=false){
+      const fee = state.fees[state.platform]?.[group]?.[idx];
+      if(!fee) return;
+      fee.value = Number(String(val || '0').replace(',','.').replace(/[^0-9.-]/g,'')) || 0;
+      clearCalcCaches();
+      if(live){
+        saveStateDebounced();
+        clearTimeout(renderTimer);
+        return;
+      }
+      saveState();
+      render();
+    }
+
+    function feeTypeLabel(f){
+      if(f.type === 'money') return 'Theo số tiền';
+      if(f.type === 'percentProfit') return '% lợi nhuận';
+      return '% doanh thu';
+    }
+
+    function feeConditionHtml(f){
+      const parts = [feeTypeLabel(f)];
+      if(f.minEnabled) parts.push(`Đơn tối thiểu ${money(f.minOrder)}`);
+      if(f.maxEnabled) parts.push(`Giảm tối đa ${money(f.maxAmount)}`);
+      return parts.map(x=>`<span class="fee-chip">${x}</span>`).join('');
+    }
+
+    function renderFeeRows(group, cost, price, options = {}){
+      const rows = state.fees[state.platform][group];
+      return rows
+        .map((f, i) => ({f, i}))
+        .filter(({f}) => !(options.hideIndustryFee && isIndustryFee(f)))
+        .map(({f, i}) => {
+        const amt = calcRowAmount(f, cost, price);
+        const displayValue = isIndustryFee(f) ? currentCategoryRate(state.category) : f.value;
+        return `
+          <div class="fee-row ${f.enabled ? '' : 'row-off'}">
+            <div>
+              <div class="fee-name" contenteditable="true" onblur="renameFee('${group}',${i},this.textContent)">${f.name}</div>
+              <div class="fee-desc">${f.desc}</div>
+              <div class="fee-conditions">${feeConditionHtml(f)}</div>
+            </div>
+            <div>
+              <input class="fee-input" data-live-edit="1" value="${String(displayValue).replace('.',',')}" oninput="updateFeeValue('${group}',${i},this.value,true)" onblur="updateFeeValue('${group}',${i},this.value,false)" onkeydown="if(event.key==='Enter')this.blur()" ${isIndustryFee(f)?'title="Giá trị lấy từ bảng phí ngành hàng"':''}>
+            </div>
+            <div class="amt">${money(amt)}</div>
+            <label class="switch">
+              <input type="checkbox" ${f.enabled ? 'checked':''} onchange="updateFee('${group}',${i},'enabled',this.checked)">
+              <span class="track"><span class="thumb"></span></span>
+            </label>
+          </div>`;
+      }).join('');
+    }
+
+    function renderSingle(){
+      applyBusinessRules(state.business);
+      applyCategoryFee(state.category);
+      const r = calcOne(state.cost, state.price, state.category);
+      const revenueBase = displayBase(r) || 1;
+      const fixeds = state.fees[state.platform].fixed;
+      const vars = state.fees[state.platform].variable;
+      const accentBtn = state.platform === 'tiktok' ? 'btn tiktok-save' : 'btn save';
+      const mainBtn = state.platform === 'tiktok' ? 'btn tiktok-save' : 'btn primary';
+      const topFeePairs = [...fixeds, ...vars].map(f => [f.name, calcRowAmount(f, state.cost, state.price)]).sort((a,b)=>b[1]-a[1]).slice(0,5);
+      const targetMargin = state.platform === 'tiktok' ? 12 : 15;
+      const goalA = suggestedPriceForProduct(
+        {cost:state.cost, price:state.price, cat:state.category},
+        {mode:'percent', percentBase:'dt', value:targetMargin}
+      );
+      const breakevenPrice = suggestedPriceForProduct(
+        {cost:state.cost, price:state.price, cat:state.category},
+        {mode:'money', percentBase:'dt', value:0}
+      );
+      const targetProfit = goalA ? calcOne(state.cost, goalA, state.category).profit : 0;
+      const missingProfit = Math.max(0, targetProfit - r.profit);
+      const goalB = missingProfit <= 0 ? 'Đã đạt mục tiêu' : `Cần tối ưu ${money(missingProfit)}`;
+      const refundLoss = Math.max(0, Number(r.cost || 0) + Number(r.total || 0));
+      const cushion = r.profit > 0 ? `${Math.max(1, Math.ceil(refundLoss / r.profit))} đơn` : 'Không đủ đệm';
+      const breakEvenAcos = displayBase(r) > 0 ? Math.max(0, r.profit / displayBase(r) * 100) : 0;
+      let deepDiag = '';
+      let deepTone = state.platform === 'tiktok' ? 'tiktok' : '';
+      if(r.profit < 0){ deepDiag = 'ĐANG LỖ — Cần sửa giá hoặc giảm phí ngay'; deepTone = ''; }
+      else if(r.margin < 5){ deepDiag = 'CẢNH BÁO — Biên lợi nhuận quá mỏng'; deepTone = ''; }
+      else if(r.margin < targetMargin){ deepDiag = 'TẠM ỔN — Chưa đạt biên an toàn'; }
+      else { deepDiag = 'XUẤT SẮC — Đã đạt biên lợi nhuận an toàn'; }
+      const mainRiskFee = topFeePairs && topFeePairs[0] ? topFeePairs[0] : ['Khoản phí lớn nhất',0];
+      const deepSummary = r.profit < 0
+        ? `Sản phẩm đang lỗ ${money(Math.abs(r.profit))}/đơn. Cần tăng giá, giảm phí hoặc xem lại giá vốn trước khi chạy quảng cáo.`
+        : r.margin < targetMargin
+          ? `Biên hiện tại ${pct(r.margin,2)} thấp hơn mục tiêu ${pct(targetMargin,0)}. Nên ưu tiên tăng giá hoặc tối ưu khoản phí lớn nhất: ${mainRiskFee[0]} (${money(mainRiskFee[1])}).`
+          : `Biên hiện tại ${pct(r.margin,2)} đã vượt mục tiêu ${pct(targetMargin,0)}. Có thể scale nhưng vẫn cần kiểm soát voucher, affiliate và chi phí phát sinh.`;
+      const actionOne = goalA ? `Điều chỉnh giá bán gợi ý lên ${money(goalA)} để đạt khoảng ${pct(targetMargin,0)} lợi nhuận trên doanh thu.` : 'Không tìm được giá gợi ý phù hợp, hãy kiểm tra lại giá vốn và các khoản phí.';
+      const actionTwo = missingProfit <= 0 ? 'Giữ cấu hình hiện tại, chỉ scale khi tỷ lệ hoàn/hủy ổn định.' : `Nếu không tăng giá, cần giảm tổng phí/giá vốn ít nhất ${money(missingProfit)} mỗi đơn.`;
+      const actionThree = `Theo dõi khoản phí lớn nhất “${mainRiskFee[0]}” vì đang chiếm ${displayBase(r) ? pct(mainRiskFee[1]/displayBase(r)*100,2) : '0,00%'} doanh thu.`;
+      const rate = currentCategoryRate();
+      const pin = Math.max(4, Math.min(96, ((r.margin + 5) / 25) * 100));
+      const donut1 = state.platform === 'tiktok'
+        ? `background:conic-gradient(#d69c3d 0 50%, #f27895 50% 68%, #56bd7b 68% 86%, #4f97c7 86% 100%)`
+        : `background:conic-gradient(#d69c3d 0 50%, #f27895 50% 66%, #56bd7b 66% 84%, #4f97c7 84% 100%)`;
+      const donut2 = state.platform === 'tiktok'
+        ? `background:conic-gradient(#d69c3d 0 20%, #d16c88 20% 36%, #5eb67a 36% 60%, #6c7ce5 60% 73%, #9a65cf 73% 88%, #4f97c7 88% 100%)`
+        : `background:conic-gradient(#d69c3d 0 38%, #d16c88 38% 54%, #5eb67a 54% 68%, #6c7ce5 68% 80%, #9a65cf 80% 90%, #4f97c7 90% 100%)`;
+      return `
+        <div class="section-hd"><span class="num">01</span> THÔNG TIN SẢN PHẨM <span class="section-note">· Gọn gàng · chọn ngành trực tiếp trong ô ngành hàng</span></div>
+        <div class="product-info-card">
+          <div class="product-info-grid">
+            <div class="field"><label>Giá vốn</label><input data-live-edit="1" inputmode="numeric" value="${state.cost}" oninput="updateField('cost',this.value,true)" onblur="updateField('cost',this.value,false)" onkeydown="if(event.key==='Enter')this.blur()"><div class="hint">VNĐ / sản phẩm</div></div>
+            <div class="field"><label>Giá bán</label><input data-live-edit="1" inputmode="numeric" value="${state.price}" oninput="updateField('price',this.value,true)" onblur="updateField('price',this.value,false)" onkeydown="if(event.key==='Enter')this.blur()"><div class="hint">Giá niêm yết ${state.platform === 'shopee' ? 'Shopee' : 'TikTok'}</div></div>
+            <div class="field"><label>Tên sản phẩm</label><input data-live-edit="1" value="${escapeHtml(state.productName)}" oninput="updateField('productName',this.value,true)" onblur="updateField('productName',this.value,false)" onkeydown="if(event.key==='Enter')this.blur()"><div class="hint">Dùng để lưu kịch bản</div></div>
+            <div class="field"><label>Loại shop</label>${shopTypeControl()}<div class="hint">${normalizeShopType(state.shopType) === 'Shop Mall' ? 'Đang áp phí Mall' : 'Đang áp phí shop thường'}</div></div>
+            <div class="field accent"><label>Ngành hàng</label><div class="category-inline"><input class="category-input" list="industryOptions" value="${escapeHtml(state.category)}" placeholder="Gõ để tìm ngành hàng" onchange="updateCategoryInput(this.value)"><span class="tag-rate">${fmt(rate,2)}%</span></div><div class="hint">${escapeHtml((findIndustry(state.category)||{}).level1 || 'Chọn ngành để áp phí')}</div></div>
+            <div class="field"><label>Hình thức kinh doanh</label><select onchange="updateField('business',this.value)"><option value="HKD > 3 tỷ (1% GTGT + 17% TNCN/LN)" ${state.business.includes('HKD > 3')?'selected':''}>HKD > 3 tỷ</option><option value="HKD < 3 tỷ (1% GTGT + 0.5% TNCN/doanh thu)" ${state.business.includes('HKD < 3')?'selected':''}>HKD < 3 tỷ</option><option value="Công ty (10% GTGT + 20% TNDN/LN)" ${state.business.includes('Công ty')?'selected':''}>Công ty</option></select><div class="hint">${businessTaxConfig(state.business).shortLabel}</div></div>
+          </div>
+          <div class="compact-industry-actions">
+            <div class="compact-industry-status"><b>Bảng phí ngành hàng:</b> đang dùng ${currentIndustries().length} dòng ${state.platform==='shopee'?'Shopee':'TikTok'} · Upload Excel khi sàn thay đổi bảng phí.</div>
+            <div class="compact-industry-buttons">
+              <label class="btn" style="display:inline-flex;align-items:center;justify-content:center;cursor:pointer">⇪ Upload bảng phí<input type="file" accept=".xlsx,.xls" hidden onchange="uploadIndustryExcel(event)"></label>
+              <button class="btn" onclick="resetIndustryTable()">Reset mẫu</button>
+              <button class="btn" onclick="exportIndustryTemplate()">Xuất mẫu</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-hd"><span class="num">02</span> BẢNG PHÍ CHI TIẾT <span class="section-note">· Bật/tắt từng khoản — đồng thời cập nhật tức thì</span></div>
+        <div style="display:flex;justify-content:flex-end;gap:8px;margin:-4px 0 10px"><button class="${accentBtn}" onclick="saveDefaults()">Lưu cấu hình mặc định</button><button class="btn" onclick="resetDefaults()">Reset về mặc định</button></div>
+        <div class="fee-layout">
+          <div class="fee-card fixed">
+            <div class="fee-header"><div><div class="fee-title">● Chi phí cố định</div><div class="fee-sub">Khoản phí nền tảng</div></div><div class="fee-head-cols">Tỷ lệ &nbsp;&nbsp; Số tiền &nbsp;&nbsp; Bật</div></div>
+            <div class="fee-rows">${renderFeeRows('fixed', state.cost, state.price)}<div class="add-fee" onclick="addCustomFee('fixed')">＋ Thêm khoản phí</div></div>
+            <div class="fee-total"><span>Tổng cộng</span><span>${money(r.fixed)}</span></div>
+          </div>
+          <div class="fee-card profit">
+            <div class="fee-header"><div><div class="fee-title">● Dòng tính lợi nhuận</div></div></div>
+            <div class="profit-box">
+              <div class="flow">
+                <div class="flow-item"><span>Giá bán</span><b>${money(r.price)}</b><span class="pct">100%</span></div>
+                <div class="flow-item"><span>− Phí Voucher Shop</span><b>${money(r.voucherShop || 0)}</b><span class="pct">${pct((r.voucherShop || 0)/(r.price || 1)*100)}</span></div>
+                <div class="flow-item"><span>= Doanh thu</span><b>${money(r.revenue)}</b><span class="pct">${pct(r.revenue/(r.price || 1)*100)}</span></div>
+                <div class="flow-item"><span>− Giá vốn sản phẩm</span><b>${money(r.cost)}</b><span class="pct">${pct(r.cost/revenueBase*100)}</span></div>
+                <div class="flow-item"><span>= Lãi gộp</span><b>${money(r.revenue-r.cost)}</b><span class="pct">${pct((r.revenue-r.cost)/revenueBase*100)}</span></div>
+                <div class="flow-item"><span>− Tổng phí cố định</span><b>${money(r.fixedNoVoucher ?? r.fixed)}</b><span class="pct">${pct((r.fixedNoVoucher ?? r.fixed)/revenueBase*100)}</span></div>
+                <div class="flow-item"><span>− Tổng phí biến đổi</span><b>${money(r.variableNoVoucher ?? r.variable)}</b><span class="pct">${pct((r.variableNoVoucher ?? r.variable)/revenueBase*100)}</span></div>
+              </div>
+              <div class="profit-net"><span>≈ Lợi nhuận ròng</span><strong>${money(r.profit)}</strong></div>
+            </div>
+          </div>
+          <div class="fee-card variable">
+            <div class="fee-header"><div><div class="fee-title">● Chi phí biến đổi</div><div class="fee-sub">Khoản phí linh hoạt</div></div><div class="fee-head-cols">Tỷ lệ &nbsp;&nbsp; Số tiền &nbsp;&nbsp; Bật</div></div>
+            <div class="fee-rows">${renderFeeRows('variable', state.cost, state.price)}<div class="add-fee" onclick="addCustomFee('variable')">＋ Thêm khoản phí</div></div>
+            <div class="fee-total"><span>Tổng cộng</span><span>${money(r.variable)}</span></div>
+          </div>
+        </div>
+
+        <div class="section-hd"><span class="num">03</span> KẾT QUẢ <span class="section-note">· Lợi nhuận thực sau toàn bộ phí</span></div>
+        <div class="result-card">
+          <div class="result-top">
+            <div>
+              <div class="result-kicker">◆ KẾT QUẢ · CẬP NHẬT TRỰC TIẾP</div>
+              <div style="font-size:11px;color:#96a0a9;font-weight:700;text-transform:uppercase;margin-bottom:5px">Lợi nhuận</div>
+              <div class="profit-value">${money(r.profit).replace('đ','')}<span class="profit-pill">${r.margin>=0?'+':''}${pct(r.margin,2)}</span></div>
+            </div>
+          </div>
+          <div class="range">
+            <div class="bar"><span class="pin" style="left:${pin}%"></span></div>
+            <div class="scale"><span>Lỗ</span><span>Hòa vốn</span><span>Lãi mỏng</span><span>Lãi tốt</span><span>Rất tốt</span></div>
+          </div>
+          <div class="summary-grid">
+            <div class="summary-cell"><small>Doanh thu</small><b>${money(r.revenue)}</b></div>
+            <div class="summary-cell"><small>Giá vốn</small><b>${money(r.cost)}</b></div>
+            <div class="summary-cell"><small>Tổng chi phí</small><b>${money(r.total)}</b></div>
+            <div class="summary-cell"><small>Lợi nhuận ròng %</small><b class="gain">${r.margin>=0?'+':''}${pct(r.margin,2)}</b></div>
+          </div>
+          ${state.platform==='shopee' ? `
+            <div class="alert">⚠ Lợi nhuận quá mỏng (${pct(Math.max(r.margin,0),1)}). Nếu có phát sinh chi phí ngoài dự tính, cần nhắc tăng giá bán hoặc giảm phí biến đổi (quảng cáo, affiliate...).</div>
+            <div class="alert">⚠ Tổng phí đang là ${pct(r.total/revenueBase*100,2)} doanh thu. Cần phân bổ ngân sách phù hợp cho quảng cáo, affiliate, vận hành hoặc tăng giá bán.</div>`
+            : `<div class="alert" style="background:#ecfbf3;border-color:#cfe8d6;color:#3c8a61">ⓘ Lợi nhuận tốt (${pct(r.margin,2)}).</div>`}
+          <div class="result-actions">
+            <button class="${mainBtn}" onclick="saveCurrentResult()">Lưu kết quả</button>
+            <button class="btn" onclick="window.print()">Tải ảnh</button>
+            <button class="btn" onclick="window.print()">Xuất PDF</button>
+            <button class="btn" onclick="shareResult()">Chia sẻ</button>
+          </div>
+        </div>
+
+        <div class="section-hd"><span class="num">04</span> PHÂN TÍCH TRỰC QUAN <span class="section-note">· Cơ cấu doanh thu & phân rã chi phí</span></div>
+        <div class="analysis">
+          <div class="mini-card">
+            <div class="mini-title">Cơ cấu doanh thu</div>
+            <div class="mini-sub">Doanh thu chia thành 4 nhóm giá vốn, phí, lợi nhuận.</div>
+            <div class="mini-flex">
+              <div class="donut" style="${donut1}" data-label="DOANH THU\n${money(r.revenue)}"></div>
+              <div class="legend">
+                <div><span><i style="background:#d69c3d"></i>Giá vốn</span><b>${money(r.cost)}</b></div>
+                <div><span><i style="background:#f27895"></i>Phí cố định</span><b>${money(r.fixed)}</b></div>
+                <div><span><i style="background:#4f97c7"></i>Phí biến đổi</span><b>${money(r.variable)}</b></div>
+                <div><span><i style="background:#56bd7b"></i>Lợi nhuận</span><b>${money(r.profit)}</b></div>
+              </div>
+            </div>
+          </div>
+          <div class="mini-card">
+            <div class="mini-title">Cơ cấu chi phí</div>
+            <div class="mini-sub">Phân rã tỷ trọng phí — nhìn khối nào nhiều nhất.</div>
+            <div class="mini-flex">
+              <div class="donut" style="${donut2}" data-label="TỔNG PHÍ\n${money(r.total)}"></div>
+              <div class="legend">
+                ${[...state.fees[state.platform].fixed, ...state.fees[state.platform].variable].slice(0,6).map(f=>`<div><span><i style="background:${['#d69c3d','#d16c88','#5eb67a','#6c7ce5','#9a65cf','#4f97c7'][Math.floor(Math.random()*6)]}"></i>${f.name}</span><b>${money(calcRowAmount(f,state.cost,state.price))}</b></div>`).join('')}
+              </div>
+            </div>
+          </div>
+          <div class="mini-card">
+            <div class="mini-title">Top khoản phí lớn nhất</div>
+            <div class="mini-sub">3-5 khoản phí lớn nhất trên mỗi đơn hiện tại.</div>
+            <div class="barlist">
+              ${topFeePairs.map((x, idx)=>`<div class="barrow"><span>${idx+1}. ${x[0]}</span><div class="hbar"><span style="width:${topFeePairs[0] && topFeePairs[0][1] ? x[1]/topFeePairs[0][1]*100 : 0}%"></span></div><b>${money(x[1])}</b></div>`).join('')}
+            </div>
+          </div>
+        </div>
+
+        <div class="section-hd"><span class="num">05</span> PHÂN TÍCH CHUYÊN SÂU <span class="section-note">· Chẩn đoán · mục tiêu · insight · hành động</span></div>
+        <div class="deep-card">
+          <div class="deep-kicker">☀ PHÂN TÍCH CHUYÊN SÂU ${state.platform==='tiktok'?'TIKTOK':'SHOPEE'}</div>
+          <div class="deep-main">TẦNG 1 · CHẨN ĐOÁN</div>
+          <div class="diag ${deepTone}">${deepDiag}</div>
+          <div class="deep-text">${deepSummary}</div>
+          <div class="goal-title ${state.platform==='tiktok'?'tiktok':''}">TẦNG 2 · MỤC TIÊU — ĐỂ ĐẠT BIÊN ${pct(targetMargin,0)} AN TOÀN, BẠN CÓ 2 LỰA CHỌN</div>
+          <div class="deep-grid">
+            <div class="deep-box"><small>Lộ trình A — Giá bán gợi ý</small><b>${goalA ? money(goalA) : 'Không đạt'}</b><span>${goalA ? `Tăng ${money(Math.max(0, goalA - state.price))} so với giá hiện tại` : 'Cần giảm phí hoặc giá vốn trước'}</span></div>
+            <div class="deep-box"><small>Lộ trình B — Tối ưu phí/giá vốn</small><b>${goalB}</b><span>Khoảng thiếu để đạt mục tiêu lợi nhuận</span></div>
+          </div>
+          <div class="tips-hd ${state.platform==='tiktok'?'tiktok':''}">TẦNG 3 · INSIGHT CHUYÊN SÂU</div>
+          <div class="tip-item">▣ Khoản phí lớn nhất hiện tại: ${mainRiskFee[0]} = ${money(mainRiskFee[1])}, tương đương ${r.price ? pct(mainRiskFee[1]/r.price*100,2) : '0,00%'} doanh thu.</div>
+          <div class="tip-item">▣ Đệm bù 1 đơn hoàn hiện tại: ${cushion}. Nếu chỉ số này quá cao, sản phẩm rất dễ lỗ khi có hoàn/hủy/đổi trả.</div>
+          <div class="act-hd ${state.platform==='tiktok'?'tiktok':''}">TẦNG 4 · HÀNH ĐỘNG GỢI Ý</div>
+          <div class="action-item"><span class="action-dot">1</span><span>${actionOne}</span></div>
+          <div class="action-item"><span class="action-dot">2</span><span>${actionTwo}</span></div>
+          <div class="action-item"><span class="action-dot">3</span><span>${actionThree}</span></div>
+          <div class="deep-metrics">
+            <div class="deep-metric"><small>Giá hòa vốn</small><b>${breakevenPrice ? money(breakevenPrice) : 'Không đạt'}</b></div>
+            <div class="deep-metric"><small>ACOS hòa vốn</small><b>${pct(breakEvenAcos,2)}</b></div>
+            <div class="deep-metric"><small>Đệm bù 1 đơn hoàn</small><b>${cushion}</b></div>
+          </div>
+        </div>
+
+        <div class="section-hd"><span class="num">06</span> SO SÁNH KỊCH BẢN <span class="section-note">· Lưu & so sánh tối đa 3 cấu hình</span></div>
+        <div class="scenario-box">
+          <div class="scenario-row">
+            <div>
+              <div class="scenario-title">So sánh kịch bản</div>
+              <div class="scenario-sub">Lưu lại các cấu hình khác nhau và so sánh lợi nhuận side-by-side. Tối đa 3 kịch bản.</div>
+            </div>
+            <div class="scenario-actions">
+              <button class="${mainBtn}" onclick="saveScenario()">Lưu kịch bản hiện tại</button>
+              <button class="btn" onclick="showScenarios()">Xem so sánh</button>
+            </div>
+          </div>
+        </div>`;
+    }
+
+    function renderBulk(){
+      applyCategoryFee(state.category);
+      const products = currentProducts();
+      const items = products.map(p => ({...p, ...calcOne(p.cost, p.price, p.cat || state.category)}));
+      const total = items.reduce((a,b)=>({
+        cost:a.cost+b.cost, price:a.price+b.price, revenue:(a.revenue||0)+Number(b.revenue||0), voucherShop:(a.voucherShop||0)+Number(b.voucherShop||0), fixed:a.fixed+b.fixed, variable:a.variable+b.variable,
+        total:a.total+b.total, profit:a.profit+b.profit
+      }),{cost:0,price:0,revenue:0,voucherShop:0,fixed:0,variable:0,total:0,profit:0});
+      total.margin = total.revenue ? total.profit/total.revenue*100 : 0;
+      const avgMargin = items.length ? items.reduce((s,x)=>s + Number(x.margin || 0),0) / items.length : 0;
+      const overviewMargin = avgMargin;
+      const overviewStatus = overviewMargin < 0 ? 'ĐANG LỖ' : (overviewMargin < 5 ? 'LÃI MỎNG' : (overviewMargin < 15 ? 'LÃI ỔN' : (overviewMargin < 25 ? 'LÃI TỐT' : 'RẤT TỐT')));
+      const wins = items.filter(x=>x.profit>=0).length;
+      const losses = items.length - wins;
+      const avg = items.length ? items.reduce((s,x)=>s+x.price,0)/items.length : 0;
+      const pin = Math.max(4, Math.min(96, ((overviewMargin + 5) / 25) * 100));
+      return `
+        <div class="bulk-head">
+          <div>
+            <div class="shop-title">Shop ABC</div>
+            <div class="status-line"><span class="status-badge">Cập nhật trực tiếp</span><span>${products.length} sản phẩm trong bảng</span></div>
+          </div>
+          <div class="actions">
+            <button class="btn" onclick="resetDefaults()">⟳ Reset về mặc định</button>
+            <label class="btn">⇪ Nhập Excel<input type="file" accept=".xlsx,.xls,.csv" hidden onchange="importExcel(event)"></label>
+            <button class="btn" onclick="exportExcel()">⇩ Xuất Excel</button>
+            <button class="btn" onclick="saveBulkHistory()">◷ Phiên bản đã lưu</button>
+            <button class="btn primary" onclick="saveBulk()">▣ Lưu kết quả</button>
+          </div>
+        </div>
+
+        <div class="bulk-meta-grid">
+          <div class="field"><label>Loại shop</label>${shopTypeControl()}<div class="hint">${normalizeShopType(state.shopType) === 'Shop Mall' ? 'Đang áp phí Mall' : 'Đang áp phí shop thường'}</div></div>
+          <div class="field"><label>Hình thức kinh doanh</label><select onchange="updateField('business',this.value)"><option value="HKD > 3 tỷ (1% GTGT + 17% TNCN/LN)" ${state.business.includes('HKD > 3')?'selected':''}>HKD > 3 tỷ</option><option value="HKD < 3 tỷ (1% GTGT + 0.5% TNCN/doanh thu)" ${state.business.includes('HKD < 3')?'selected':''}>HKD < 3 tỷ</option><option value="Công ty (10% GTGT + 20% TNDN/LN)" ${state.business.includes('Công ty')?'selected':''}>Công ty</option></select><div class="hint">${businessTaxConfig(state.business).shortLabel}</div></div>
+          <div class="bulk-meta-card">
+            <label>Upload Excel bảng phí ngành hàng</label>
+            <label class="btn bulk-upload-btn">⇪ Upload bảng phí ${state.platform==='shopee'?'Shopee':'TikTok'}<input type="file" accept=".xlsx,.xls" hidden onchange="uploadIndustryExcel(event)"></label>
+            <div class="industry-hint">Cập nhật khi Shopee/TikTok đổi phí</div>
+          </div>
+          <div class="bulk-meta-card">
+            <label>Trạng thái bảng phí</label>
+            <div class="bulk-status-row">
+              <div class="industry-status">${currentIndustries().length} dòng ngành hàng ${state.platform==='shopee'?'Shopee':'TikTok'}</div>
+              <div class="bulk-status-actions"><button class="btn" onclick="resetIndustryTable()">Reset</button><button class="btn" onclick="exportIndustryTemplate()">Xuất mẫu</button></div>
+            </div>
+            <div class="industry-hint">Đang áp theo ${normalizeShopType(state.shopType) === 'Shop Mall' ? 'Mall' : 'Non-Mall'}</div>
+          </div>
+        </div>
+
+        <div class="section-hd"><span class="num">01</span> CẤU HÌNH PHÍ CHUNG <span class="section-note">· Áp dụng cho tất cả sản phẩm</span></div>
+        <div class="bulk-config">
+          <div class="fee-card fixed">
+            <div class="fee-header"><div><div class="fee-title">Chi phí cố định</div><div class="fee-sub">Áp dụng cho tất cả sản phẩm</div></div><div class="fee-head-cols">Bật áp dụng</div></div>
+            <div class="fee-rows">${renderFeeRows('fixed', avg || state.cost, avg || state.price, {hideIndustryFee:true})}<div class="add-fee" onclick="addCustomFee('fixed')">＋ Thêm khoản phí</div></div>
+            <div class="fee-total"><span>Tổng chi phí cố định</span><span>${money(total.fixed)}</span></div>
+          </div>
+          <div class="fee-card variable">
+            <div class="fee-header"><div><div class="fee-title">Chi phí biến đổi</div><div class="fee-sub">Áp dụng cho tất cả sản phẩm</div></div><div class="fee-head-cols">Bật áp dụng</div></div>
+            <div class="fee-rows">${renderFeeRows('variable', avg || state.cost, avg || state.price)}<div class="add-fee" onclick="addCustomFee('variable')">＋ Thêm khoản phí</div></div>
+            <div class="fee-total"><span>Tổng chi phí biến đổi</span><span>${money(total.variable)}</span></div>
+          </div>
+        </div>
+
+        <div class="section-hd"><span class="num">02</span> TỔNG QUAN BẢNG TÍNH <span class="section-note">· Biên lợi nhuận trung bình theo kết quả từng sản phẩm</span></div>
+        <div class="overview-card">
+          <div class="overview-top"><div><b>${overviewStatus}</b><div class="overview-sub">Biên lợi nhuận trung bình theo kết quả</div></div><div class="pct-big">${pct(overviewMargin)}</div></div>
+          <div class="range"><div class="bar"><span class="pin" style="left:${pin}%"></span></div><div class="scale"><span>Lỗ</span><span>Hòa vốn</span><span>Lãi mỏng</span><span>Lãi tốt</span><span>Rất tốt</span></div></div>
+          <div class="overview-grid">
+            <div class="box"><small>Doanh thu</small><b>${money(total.revenue)}</b></div>
+            <div class="box"><small>Giá vốn</small><b>${money(total.cost)}</b></div>
+            <div class="box"><small>Tổng phí</small><b>${money(total.total)}</b></div>
+            <div class="box"><small>Lợi nhuận ròng</small><b class="gain">${money(total.profit)}</b></div>
+          </div>
+        </div>
+
+        <div class="section-hd"><span class="num">03</span> BẢNG SẢN PHẨM <span class="section-note">· Chi số & lợi nhuận từng sản phẩm</span></div>
+        <div class="sum-grid">
+          <div class="sum-card"><small>Tổng sản phẩm</small><b>${items.length}</b></div>
+          <div class="sum-card"><small>Có lãi</small><b class="gain">${wins}/${items.length}</b></div>
+          <div class="sum-card"><small>Đang lỗ</small><b class="loss">${losses}/${items.length}</b></div>
+          <div class="sum-card"><small>Giá bán TB</small><b>${money(avg)}</b></div>
+        </div>
+        ${renderProfitGoalCard()}
+
+        <div class="table-tools">
+          <div class="left-tools"><div class="search"><input id="tableSearch" placeholder="Tìm sản phẩm theo tên hoặc ngành" oninput="clearTimeout(renderTimer)" onblur="render()" onkeydown="if(event.key==='Enter')this.blur()"></div><small>${items.length} sản phẩm</small></div>
+          <div class="table-actions"><button class="btn" onclick="duplicateSelected()">⧉ Nhân đôi</button><button class="btn" onclick="deleteSelected()">🗑 Xóa</button><button class="btn primary" onclick="addProduct()">＋ Thêm sản phẩm</button></div>
+        </div>
+        <div class="table-wrap">${renderProductTable(items)}</div>`;
+    }
+
+    function renderProductTable(items){
+      const q = (document.getElementById('tableSearch')?.value || '').toLowerCase();
+      const safeItems = Array.isArray(items) ? items : [];
+      const filtered = safeItems.filter(p => String((p?.name || '') + ' ' + (p?.cat || '')).toLowerCase().includes(q));
+      const total = filtered.reduce((a,b)=>({
+        cost:a.cost+Number(b.cost||0), price:a.price+Number(b.price||0), revenue:(a.revenue||0)+Number(b.revenue||0), fixed:a.fixed+Number(b.fixed||0), variable:a.variable+Number(b.variable||0), total:a.total+Number(b.total||0), profit:a.profit+Number(b.profit||0)
+      }),{cost:0,price:0,revenue:0,fixed:0,variable:0,total:0,profit:0});
+      const totalMargin = total.revenue ? total.profit/total.revenue*100 : 0;
+      const totalProfitOnCost = total.cost ? total.profit/total.cost*100 : 0;
+      let totalSuggestedPrice = 0;
+      const skipHeavySuggest = isActiveTypingField() || filtered.length > 80;
+      const rows = filtered.map((p, i) => {
+        const suggested = skipHeavySuggest && p.suggestedPrice !== undefined ? p.suggestedPrice : suggestedPriceForProduct(p);
+        if(suggested !== null) totalSuggestedPrice += Number(suggested || 0);
+        p.suggestedPrice = suggested;
+        const suggestedHtml = suggested === null ? '<span class="suggest-price bad">Không đạt</span>' : `<span class="suggest-price">${money(suggested)}</span>`;
+        const profitOnCost = Number(p.cost || 0) ? Number(p.profit || 0) / Number(p.cost || 0) * 100 : 0;
+        return `
+            <tr draggable="true" ondragstart="startProductDrag(event, ${p.id})" ondragover="overProductDrag(event, ${p.id})" ondragleave="leaveProductDrag(event)" ondrop="dropProductDrag(event, ${p.id})" ondragend="endProductDrag(event)">
+              <td class="center"><input type="checkbox" ${p.checked ? 'checked':''} onchange="toggleProduct(${p.id}, this.checked)"></td>
+              <td>${String(i+1).padStart(2,'0')}</td>
+              <td><input class="cell-input" value="${escapeHtml(draftValue(p, 'name') || '')}" oninput="cacheProductEdit(${p.id}, 'name', this.value)" onblur="commitProductEdit(${p.id}, 'name', this.value)" onkeydown="if(event.key==='Enter')this.blur()"></td>
+              <td><input class="cell-input" list="industryOptions" value="${escapeHtml(p.cat || state.category)}" onchange="editProduct(${p.id}, 'cat', this.value, true)"></td>
+              <td class="align-r"><input class="cell-input align-r" inputmode="numeric" value="${escapeHtml(draftValue(p, 'cost'))}" oninput="cacheProductEdit(${p.id}, 'cost', this.value)" onblur="commitProductEdit(${p.id}, 'cost', this.value)" onkeydown="if(event.key==='Enter')this.blur()"></td>
+              <td class="align-r"><input class="cell-input align-r" inputmode="numeric" value="${escapeHtml(draftValue(p, 'price'))}" oninput="cacheProductEdit(${p.id}, 'price', this.value)" onblur="commitProductEdit(${p.id}, 'price', this.value)" onkeydown="if(event.key==='Enter')this.blur()"></td>
+              <td class="align-r">${suggestedHtml}</td>
+              <td class="align-r">${money(p.fixed)}</td>
+              <td class="align-r">${money(p.variable)}</td>
+              <td class="align-r">${money(p.total)}</td>
+              <td class="align-r ${p.profit >= 0 ? 'gain':'loss'}">${money(p.profit)}</td>
+              <td class="align-r ${p.margin >= 0 ? 'gain':'loss'}">${p.margin>=0?'↗':'↘'} ${pct(p.margin)}</td>
+              <td class="align-r ${profitOnCost >= 0 ? 'gain':'loss'}">${profitOnCost>=0?'↗':'↘'} ${pct(profitOnCost)}</td>
+              <td class="center"><button class="btn" onclick="removeProduct(${p.id})">×</button></td>
+            </tr>`;
+      }).join('');
+      return `<table>
+        <colgroup>
+          <col class="col-check"><col class="col-stt"><col class="col-name"><col class="col-cat">
+          <col class="col-cost"><col class="col-price"><col class="col-suggest">
+          <col class="col-fee"><col class="col-fee"><col class="col-fee"><col class="col-profit"><col class="col-rate"><col class="col-rate"><col class="col-action">
+        </colgroup>
+        <thead>
+          <tr class="group"><th colspan="4">Cơ sở · ${filtered.length}</th><th colspan="3">Giá · gợi ý</th><th class="fixed-hd" colspan="1">Phí cố định</th><th class="var-hd" colspan="1">Phí biến đổi</th><th class="res-hd" colspan="4">Kết quả · ${filtered.length}</th><th></th></tr>
+          <tr class="cols"><th class="center"><input type="checkbox" onchange="checkAll(this.checked)"></th><th>#</th><th>Tên SP</th><th>Ngành</th><th class="align-r">Vốn</th><th class="align-r">Bán</th><th class="align-r">Giá gợi ý</th><th class="align-r">Σ cố định</th><th class="align-r">Σ biến đổi</th><th class="align-r">Tổng phí</th><th class="align-r">LN</th><th class="align-r">%LN/DT</th><th class="align-r">%LN/GV</th><th></th></tr>
+        </thead>
+        <tbody>${rows}</tbody>
+        <tfoot>
+          <tr>
+            <td colspan="4">Σ TỔNG CỘNG · ${filtered.length} SP</td>
+            <td class="align-r">${money(total.cost)}</td>
+            <td class="align-r">${money(total.price)}</td>
+            <td class="align-r">${money(totalSuggestedPrice)}</td>
+            <td class="align-r">${money(total.fixed)}</td>
+            <td class="align-r">${money(total.variable)}</td>
+            <td class="align-r">${money(total.total)}</td>
+            <td class="align-r ${total.profit >=0 ? 'gain':'loss'}">${money(total.profit)}</td>
+            <td class="align-r ${totalMargin>=0 ? 'gain':'loss'}">${totalMargin>=0?'↗':'↘'} ${pct(totalMargin)}</td>
+            <td class="align-r ${totalProfitOnCost>=0 ? 'gain':'loss'}">${totalProfitOnCost>=0?'↗':'↘'} ${pct(totalProfitOnCost)}</td>
+            <td></td>
+          </tr>
+        </tfoot>
+      </table>`;
+    }
+
+    function render(){
+      const platformLabel = state.platform === 'shopee' ? 'Shopee' : 'TikTok';
+      document.body.className = state.platform;
+      const app = document.getElementById('app');
+      app.innerHTML = `
+        <div class="mode-tabs platform-tabs" style="margin-bottom:12px">
+          <button class="pill ${state.platform==='shopee'?'active':''}" onclick="setPlatform('shopee')">Shopee Calculator</button>
+          <button class="pill ${state.platform==='tiktok'?'active':''}" onclick="setPlatform('tiktok')">TikTok Calculator</button>
+        </div>
+        <div class="top-row">
+          <div>
+            <div class="kicker">${platformLabel.toUpperCase()} TOOLKIT · MÁY TÍNH PHÍ · vFinal_v37</div>
+            <h1>Tính lợi nhuận sản phẩm <span class="brand">${platformLabel}</span></h1>
+            <div class="subtitle">Nhập giá vốn và giá bán — biết ngay lợi nhuận thực sau mọi khoản phí sàn, thanh toán, voucher và vận hành.</div>
+          </div>
+        </div>
+        <div class="mode-tabs">
+          <button class="pill ${state.mode==='single'?'active':''}" onclick="setMode('single')">• Tính từ giá bán</button>
+          <button class="pill ${state.mode==='bulk'?'active':''}" onclick="setMode('bulk')">• Tính nhiều sản phẩm</button>
+        </div>
+        <datalist id="industryOptions">${industryOptionsHtml()}</datalist>
+        ${state.mode === 'single' ? renderSingle() : renderBulk()}
+      `;
+    }
+
+    function saveDefaults(){ saveState(); alert('Đã lưu cấu hình mặc định.'); }
+    function resetDefaults(){ state.fees = clone(defaults); saveState(); render(); }
+    function saveCurrentResult(){ alert('Đã lưu kết quả hiện tại.'); }
+    function shareResult(){ navigator.clipboard.writeText(location.href).then(()=>alert('Đã sao chép liên kết trang vào clipboard.')).catch(()=>alert('Chia sẻ thủ công từ trình duyệt nhé.')); }
+    function saveScenario(){
+      const r = calcOne(state.cost, state.price);
+      const item = {platform:state.platform, name:state.productName || 'Kịch bản', price:r.price, cost:r.cost, profit:r.profit, margin:r.margin};
+      state.scenarios.unshift(item);
+      state.scenarios = state.scenarios.slice(0,3);
+      saveState();
+      alert('Đã lưu kịch bản hiện tại.');
+    }
+    function showScenarios(){
+      if(!state.scenarios.length){ alert('Chưa có kịch bản nào được lưu.'); return; }
+      alert(state.scenarios.map((s,i)=>`${i+1}. ${s.platform.toUpperCase()} · ${s.name}\nGiá bán: ${money(s.price)} · Giá vốn: ${money(s.cost)}\nLợi nhuận: ${money(s.profit)} · Biên: ${pct(s.margin)}`).join('\n\n'));
+    }
+    function addProduct(){ const products=currentProducts(); products.unshift({id:Date.now(), name:'Sản phẩm mới', cat:state.category, cost:100000, price:200000, checked:false}); saveState(); render(); }
+    function editProduct(id, key, value, doRender=false){
+      const p = currentProducts().find(x=>x.id===id);
+      if(p){
+        p[key]=value;
+        clearCalcCaches();
+        saveStateDebounced();
+        if(doRender) scheduleRender(60);
+        else clearTimeout(renderTimer);
+      }
+    }
+    function removeProduct(id){ setCurrentProducts(currentProducts().filter(x=>x.id!==id)); saveState(); render(); }
+    function moveProduct(id, dir){
+      const products = currentProducts();
+      const idx = products.findIndex(x=>String(x.id) === String(id));
+      if(idx < 0) return;
+      const next = idx + Number(dir || 0);
+      if(next < 0 || next >= products.length) return;
+      const [item] = products.splice(idx, 1);
+      products.splice(next, 0, item);
+      clearCalcCaches();
+      saveState();
+      render();
+    }
+    let draggingProductId = null;
+    function startProductDrag(event, id){
+      if(event.target && /input|select|textarea|button/i.test(event.target.tagName)) return event.preventDefault();
+      draggingProductId = id;
+      event.currentTarget.classList.add('dragging');
+      if(event.dataTransfer){ event.dataTransfer.effectAllowed='move'; event.dataTransfer.setData('text/plain', String(id)); }
+    }
+    function overProductDrag(event, id){
+      if(draggingProductId === null || String(draggingProductId) === String(id)) return;
+      event.preventDefault();
+      event.currentTarget.classList.add('drag-over');
+      if(event.dataTransfer) event.dataTransfer.dropEffect='move';
+    }
+    function leaveProductDrag(event){ event.currentTarget.classList.remove('drag-over'); }
+    function dropProductDrag(event, targetId){
+      event.preventDefault();
+      const sourceId = event.dataTransfer ? (event.dataTransfer.getData('text/plain') || draggingProductId) : draggingProductId;
+      const products = currentProducts();
+      const from = products.findIndex(x=>String(x.id) === String(sourceId));
+      const to = products.findIndex(x=>String(x.id) === String(targetId));
+      if(from >= 0 && to >= 0 && from !== to){
+        const [item] = products.splice(from, 1);
+        products.splice(to, 0, item);
+        clearCalcCaches();
+        saveState();
+      }
+      draggingProductId = null;
+      render();
+    }
+    function endProductDrag(event){ draggingProductId = null; document.querySelectorAll('tr.dragging,tr.drag-over').forEach(el=>el.classList.remove('dragging','drag-over')); }
+    function toggleProduct(id, checked){ const p = currentProducts().find(x=>x.id===id); if(p){ p.checked = checked; saveState(); } }
+    function checkAll(v){ currentProducts().forEach(p=>p.checked=v); saveState(); render(); }
+    function duplicateSelected(){ const products=currentProducts(); const selected = products.filter(x=>x.checked); if(!selected.length){ alert('Hãy chọn ít nhất 1 dòng để nhân đôi.'); return; } selected.forEach(p=>products.push({...p,id:Date.now()+Math.random(),checked:false,name:p.name})); saveState(); render(); }
+    function deleteSelected(){ const products=currentProducts(); const count = products.filter(x=>x.checked).length; if(!count){ alert('Chưa có sản phẩm nào được chọn.'); return; } setCurrentProducts(products.filter(x=>!x.checked)); saveState(); render(); }
+    function saveBulk(){ saveState(); alert('Đã lưu bảng sản phẩm.'); }
+    function saveBulkHistory(){ alert('Phiên bản gần nhất đang được lưu trong LocalStorage của trình duyệt.'); }
+    function normPct(v){
+      if(typeof v === 'number') return v <= 1 ? +(v*100).toFixed(4) : v;
+      const n = Number(String(v ?? '').replace('%','').replace(',','.').replace(/[^0-9.-]/g,''));
+      return Number.isFinite(n) ? (n <= 1 ? +(n*100).toFixed(4) : n) : 0;
+    }
+
+    function ensureXLSX(){
+      return new Promise((resolve, reject)=>{
+        if(window.XLSX) return resolve(window.XLSX);
+        const existing = document.querySelector('script[data-xlsx-loader="1"]');
+        if(existing){
+          existing.addEventListener('load',()=>resolve(window.XLSX),{once:true});
+          existing.addEventListener('error',()=>reject(new Error('Không tải được thư viện XLSX. Hãy kiểm tra kết nối internet hoặc upload file CSV.')),{once:true});
+          return;
+        }
+        const s=document.createElement('script');
+        s.src='https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js';
+        s.async=true;
+        s.dataset.xlsxLoader='1';
+        s.onload=()=>resolve(window.XLSX);
+        s.onerror=()=>reject(new Error('Không tải được thư viện XLSX. Hãy kiểm tra kết nối internet hoặc upload file CSV.'));
+        document.head.appendChild(s);
+      });
+    }
+    function downloadCSV(filename, rows){
+      const csv = rows.map(row=>row.map(cell=>`"${String(cell ?? '').replace(/"/g,'""')}"`).join(',')).join('\n');
+      const a=document.createElement('a');
+      a.href=URL.createObjectURL(new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'}));
+      a.download=filename;
+      a.click();
+      setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+    }
+
+    function parseIndustryRows(rows){
+      if(!rows || rows.length < 2) throw new Error('File Excel cần có dòng tiêu đề và dữ liệu ngành hàng.');
+      const header = rows[0].map(x => normalizeText(x));
+      const findCol = tests => header.findIndex(h => tests.some(t => h.includes(normalizeText(t))));
+      const idxName = findCol(['ngành hàng','nganh hang','category','tên ngành','ten nganh']);
+      let idxMall = header.findIndex(h => h.includes('mall') && !h.includes('non mall') && !h.includes('nonmall'));
+      let idxNon = header.findIndex(h => h.includes('non mall') || h.includes('nonmall') || h.includes('shop thuong') || h.includes('tieu chuan') || h.includes('standard'));
+      if(idxNon < 0) idxNon = findCol(['phí cố định','phi co dinh','phí hoa hồng','phi hoa hong','commission']);
+      if(idxMall < 0) idxMall = idxNon;
+      if(idxName < 0 || idxNon < 0) throw new Error('Không tìm thấy cột Ngành hàng và cột phí. Shopee cần: Ngành hàng, Non-Mall, Mall. TikTok cần: Ngành hàng, phí tiêu chuẩn, phí Mall.');
+      const idxLevel1 = findCol(['cấp 1','cap 1','level 1','ngành cấp 1']);
+      const idxLevel2 = findCol(['cấp 2','cap 2','level 2','ngành cấp 2']);
+      const idxLevel3 = findCol(['cấp 3','cap 3','level 3','ngành cấp 3']);
+      return rows.slice(1).filter(r => String(r[idxName]||'').trim()).map((r,i)=>({
+        name:String(r[idxName]).trim(),
+        level1:idxLevel1>=0?String(r[idxLevel1]||'').trim():'',
+        level2:idxLevel2>=0?String(r[idxLevel2]||'').trim():'',
+        level3:idxLevel3>=0?String(r[idxLevel3]||'').trim():'',
+        nonmall:normPct(r[idxNon]),
+        mall:normPct(r[idxMall]),
+        stt:i+1
+      }));
+    }
+    function uploadIndustryExcel(e){
+      const file = e.target.files[0];
+      if(!file) return;
+      const ext = file.name.split('.').pop().toLowerCase();
+      if(!['xlsx','xls'].includes(ext)){ alert('Vui lòng upload file Excel .xlsx hoặc .xls'); return; }
+      const reader = new FileReader();
+      reader.onload = async ev => {
+        try{
+          await ensureXLSX();
+          const wb = XLSX.read(new Uint8Array(ev.target.result), {type:'array'});
+          const ws = wb.Sheets[wb.SheetNames[0]];
+          const rows = XLSX.utils.sheet_to_json(ws, {header:1, defval:''});
+          const parsed = parseIndustryRows(rows);
+          if(!parsed.length) throw new Error('Không đọc được dòng ngành hàng nào từ file Excel.');
+          industryDB[state.platform] = parsed;
+          state.category = parsed[0].name;
+          applyCategoryFee(state.category);
+          saveState();
+          alert(`Đã cập nhật ${parsed.length} dòng ngành hàng ${state.platform==='shopee'?'Shopee':'TikTok'} từ file: ${file.name}`);
+          render();
+        }catch(err){ alert(err.message); }
+      };
+      reader.readAsArrayBuffer(file);
+    }
+    function resetIndustryTable(){
+      industryDB[state.platform] = clone(defaultIndustries[state.platform]);
+      state.category = (industryDB[state.platform][0]||{}).name || '';
+      applyCategoryFee(state.category);
+      saveState();
+      render();
+    }
+    async function exportIndustryTemplate(){
+      const rows = [['Ngành hàng','Ngành cấp 1','Non-Mall % / Tiêu chuẩn %','Mall %']].concat(currentIndustries().map(x=>[x.name,x.level1||'',x.nonmall,x.mall]));
+      try{
+        await ensureXLSX();
+        const wb = XLSX.utils.book_new();
+        const ws = XLSX.utils.aoa_to_sheet(rows);
+        XLSX.utils.book_append_sheet(wb, ws, 'Bang phi nganh hang');
+        XLSX.writeFile(wb, `${state.platform}_bang_phi_nganh_hang_mau.xlsx`);
+      }catch(e){
+        downloadCSV(`${state.platform}_bang_phi_nganh_hang_mau.csv`, rows);
+      }
+    }
+    function importExcel(e){
+      const file = e.target.files[0]; if(!file) return;
+      const reader = new FileReader();
+      reader.onload = async ev => {
+        try{
+          await ensureXLSX();
+          const wb = XLSX.read(ev.target.result, {type:'binary'});
+          const ws = wb.Sheets[wb.SheetNames[0]];
+          const rows = XLSX.utils.sheet_to_json(ws);
+          setCurrentProducts(rows.map((r,idx)=>({
+            id:Date.now()+idx,
+            name:r['Tên SP'] || r['Ten SP'] || r.name || `SP ${idx+1}`,
+            cat:r['Ngành'] || r['Nganh'] || r.cat || state.category,
+            cost:number(r['Giá vốn'] || r['Gia von'] || r.cost),
+            price:number(r['Giá bán'] || r['Gia ban'] || r.price),
+            checked:false
+          })));
+          saveState(); render();
+        }catch(err){ alert(err.message); }
+      };
+      reader.readAsBinaryString(file);
+    }
+    async function exportExcel(){
+      const data = currentProducts().map(p=>{
+        const r = calcOne(p.cost,p.price,p.cat || state.category);
+        return {'Tên SP':p.name,'Ngành':p.cat,'Giá vốn':p.cost,'Giá bán':p.price,'Giá gợi ý':suggestedPriceForProduct(p) ?? '', 'Phí cố định':Math.round(r.fixed),'Phí biến đổi':Math.round(r.variable),'Tổng phí':Math.round(r.total),'Lợi nhuận':Math.round(r.profit),'%LN/DT':Number(r.margin.toFixed(2)),'%LN/GV':Number(((p.cost ? r.profit/p.cost*100 : 0)).toFixed(2))};
+      });
+      try{
+        await ensureXLSX();
+        const wb = XLSX.utils.book_new();
+        const ws = XLSX.utils.json_to_sheet(data);
+        XLSX.utils.book_append_sheet(wb, ws, 'Bang tinh');
+        XLSX.writeFile(wb, `bang_tinh_${state.platform}.xlsx`);
+      }catch(e){
+        const headers = Object.keys(data[0] || {'Tên SP':'','Ngành':'','Giá vốn':'','Giá bán':''});
+        downloadCSV(`bang_tinh_${state.platform}.csv`, [headers].concat(data.map(row=>headers.map(h=>row[h]))));
+      }
+    }
+
+    window.setPlatform=setPlatform;
+    window.setMode=setMode;
+    window.updateField=updateField;
+    window.updateBulkGoal=updateBulkGoal;
+    window.updateFee=updateFee;
+    window.addCustomFee=addCustomFee;
+    window.closeCustomFeeModal=closeCustomFeeModal;
+    window.updateCustomFeeUnit=updateCustomFeeUnit;
+    window.submitCustomFee=submitCustomFee;
+    window.renameFee=renameFee;
+    window.updateFeeValue=updateFeeValue;
+    window.saveDefaults=saveDefaults;
+    window.resetDefaults=resetDefaults;
+    window.saveCurrentResult=saveCurrentResult;
+    window.shareResult=shareResult;
+    window.saveScenario=saveScenario;
+    window.showScenarios=showScenarios;
+    window.addProduct=addProduct;
+    window.editProduct=editProduct;
+    window.removeProduct=removeProduct;
+    window.moveProduct=moveProduct;
+    window.startProductDrag=startProductDrag;
+    window.overProductDrag=overProductDrag;
+    window.leaveProductDrag=leaveProductDrag;
+    window.dropProductDrag=dropProductDrag;
+    window.endProductDrag=endProductDrag;
+    window.toggleProduct=toggleProduct;
+    window.checkAll=checkAll;
+    window.duplicateSelected=duplicateSelected;
+    window.deleteSelected=deleteSelected;
+    window.uploadIndustryExcel=uploadIndustryExcel;
+    window.resetIndustryTable=resetIndustryTable;
+    window.exportIndustryTemplate=exportIndustryTemplate;
+    window.updateCategoryInput=updateCategoryInput;
+    window.importExcel=importExcel;
+    window.exportExcel=exportExcel;
+    window.saveBulk=saveBulk;
+    window.saveBulkHistory=saveBulkHistory;
+    window.number=number;
+    window.setShopType=setShopType;
+    window.shopTypeControl=shopTypeControl;
+
+    if(!findIndustry(state.category, false)){ state.category = (currentIndustries()[0]||{}).name || state.category; }
+    applyBusinessRules(state.business);
+    applyCategoryFee(state.category);
+    saveState();
+    render();
+  </script>
+</body>
+</html>
